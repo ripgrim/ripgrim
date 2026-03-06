@@ -1,0 +1,9 @@
+{
+  "name": "gitmotion-skill",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./tools.ts",
+  "dependencies": {
+    "octokit": "^4.0.2"
+  }
+}
