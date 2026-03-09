@@ -1,4 +1,5 @@
 ### GitHub Stats
+<!-- . -->
 
 <div align="left">
   <img src="https://streak-stats.demolab.com?user=ripgrim&theme=dark&hide_border=true&background=000000" />
