@@ -9,7 +9,7 @@
         aria-labelledby="descId"
       >
         <title id="titleId">grim's GitHub Stats, Rank: A</title>
-        <desc id="descId">Total Stars Earned: 121, Total Commits  (last year) : 1642, Total PRs: 170, Total Issues: 98, Contributed to (last year): 31</desc>
+        <desc id="descId">Total Stars Earned: 121, Total Commits  (last year) : 1647, Total PRs: 170, Total Issues: 98, Contributed to (last year): 31</desc>
         <style>
           .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -73,7 +73,7 @@
         stroke-dashoffset: 251.32741228718345;
       }
       to {
-        stroke-dashoffset: 49.6369305027914;
+        stroke-dashoffset: 49.60007956580842;
       }
     }
   
