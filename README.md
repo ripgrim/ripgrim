@@ -7,3 +7,8 @@
 </div>
 
 [ai skills i use](https://github.com/ripgrim/ripgrim/tree/main/.skills)
+
+---
+
+### 🦞 Bounty Test
+This repository supports bounty.new rewards for contributions.
