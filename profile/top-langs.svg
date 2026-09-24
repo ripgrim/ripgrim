@@ -130,7 +130,7 @@
           data-testid="lang-progress"
           x="0"
           y="0"
-          width="216.99"
+          width="216.86"
           height="8"
           fill="#f34b7d"
         />
@@ -138,9 +138,9 @@
         <rect
           mask="url(#rect-mask)"
           data-testid="lang-progress"
-          x="216.99"
+          x="216.86"
           y="0"
-          width="14.38"
+          width="14.51"
           height="8"
           fill="#3178c6"
         />
@@ -150,7 +150,7 @@
           data-testid="lang-progress"
           x="231.37"
           y="0"
-          width="13.16"
+          width="13.15"
           height="8"
           fill="#555555"
         />
@@ -158,7 +158,7 @@
         <rect
           mask="url(#rect-mask)"
           data-testid="lang-progress"
-          x="244.53"
+          x="244.52"
           y="0"
           width="14.46"
           height="8"
@@ -168,9 +168,9 @@
         <rect
           mask="url(#rect-mask)"
           data-testid="lang-progress"
-          x="248.99"
+          x="248.98000000000002"
           y="0"
-          width="10.58"
+          width="10.59"
           height="8"
           fill="#663399"
         />
@@ -191,14 +191,14 @@
     <g class="stagger" style="animation-delay: 450ms">
       <circle cx="5" cy="6" r="5" fill="#f34b7d" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        C++ 86.80%
+        C++ 86.74%
       </text>
     </g>
   </g><g transform="translate(0, 25)">
     <g class="stagger" style="animation-delay: 600ms">
       <circle cx="5" cy="6" r="5" fill="#3178c6" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        TypeScript 5.75%
+        TypeScript 5.80%
       </text>
     </g>
   </g><g transform="translate(0, 50)">
@@ -219,7 +219,7 @@
     <g class="stagger" style="animation-delay: 600ms">
       <circle cx="5" cy="6" r="5" fill="#663399" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        CSS 0.23%
+        CSS 0.24%
       </text>
     </g>
   </g><g transform="translate(0, 50)">
