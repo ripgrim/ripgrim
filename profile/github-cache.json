@@ -6,17 +6,6 @@
     "following": 96
   },
   "repos": {
-    "Boring-Software-Inc/dither-kit": {
-      "name": "dither-kit",
-      "full_name": "Boring-Software-Inc/dither-kit",
-      "html_url": "https://github.com/Boring-Software-Inc/dither-kit",
-      "description": "Composable, dithered charts for shadcn/ui — area, line, bar, pie & radar. Docs: tripwire.sh/dither-kit",
-      "language": "TypeScript",
-      "stargazers_count": 121,
-      "forks_count": 12,
-      "updated_at": "2026-10-28T04:00:10Z",
-      "topics": []
-    },
     "ripgrim-com": {
       "name": "ripgrim-com",
       "full_name": "ripgrim/ripgrim-com",
@@ -37,6 +26,17 @@
       "stargazers_count": 2,
       "forks_count": 2,
       "updated_at": "2026-10-28T00:13:34Z",
+      "topics": []
+    },
+    "Boring-Software-Inc/dither-kit": {
+      "name": "dither-kit",
+      "full_name": "Boring-Software-Inc/dither-kit",
+      "html_url": "https://github.com/Boring-Software-Inc/dither-kit",
+      "description": "Composable, dithered charts for shadcn/ui — area, line, bar, pie & radar. Docs: tripwire.sh/dither-kit",
+      "language": "TypeScript",
+      "stargazers_count": 121,
+      "forks_count": 12,
+      "updated_at": "2026-10-28T04:00:10Z",
       "topics": []
     },
     "lab": {
