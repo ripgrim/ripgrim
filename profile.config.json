@@ -2,14 +2,14 @@
   "$schema": "./profile.config.schema.json",
   "github": {
     "username": "ripgrim",
-    "featuredRepos": ["fx", "anon-kode", "spotless", "Boring-Software-Inc/dither-kit"],
+    "featuredRepos": ["Boring-Software-Inc/dither-kit"],
     "moreRepos": ["lab", "ripgrim-com", "better-env", "disrecord"]
   },
   "profile": {
     "name": "grim",
     "handle": "@ripgrim",
-    "role": "designer · developer · practical impracticality",
-    "intro": "Designer and developer exploring practical impracticality.",
+    "role": "practical impracticality",
+    "intro": "Designer and developer building boring software.",
     "status": "building weird, useful software",
     "focus": "tools",
     "state": "active",
