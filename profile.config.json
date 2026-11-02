@@ -2,8 +2,28 @@
   "$schema": "./profile.config.schema.json",
   "github": {
     "username": "ripgrim",
-    "featuredRepos": ["Boring-Software-Inc/dither-kit", "boring-software-inc/v2"], 
+    "featuredRepos": [
+      {
+        "repo": "Boring-Software-Inc/dither-kit",
+        "solidButton": false,
+        "showBanner": true,
+        "autoOgImage": true,
+        "bannerUrl": ""
+      },
+      {
+        "repo": "Boring-Software-Inc/v2",
+        "solidButton": false,
+        "showBanner": true,
+        "autoOgImage": true,
+        "bannerUrl": ""
+      }
+    ],
     "moreRepos": ["lab", "ripgrim-com"]
+  },
+  "projects": {
+    "bannersEnabled": true,
+    "autoOgImages": true,
+    "bannerHeight": 132
   },
   "profile": {
     "name": "grim",

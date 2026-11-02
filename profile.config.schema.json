@@ -2,15 +2,43 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Animated GitHub profile configuration",
   "type": "object",
-  "required": ["github", "profile", "theme", "motion", "effects", "layout"],
+  "required": ["github", "projects", "profile", "theme", "motion", "effects", "layout"],
   "properties": {
     "github": {
       "type": "object",
       "required": ["username", "featuredRepos", "moreRepos"],
       "properties": {
         "username": { "type": "string", "minLength": 1 },
-        "featuredRepos": { "type": "array", "items": { "type": "string" }, "maxItems": 8 },
+        "featuredRepos": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "object",
+                "required": ["repo", "solidButton", "showBanner", "autoOgImage", "bannerUrl"],
+                "properties": {
+                  "repo": { "type": "string", "minLength": 1 },
+                  "solidButton": { "type": "boolean" },
+                  "showBanner": { "type": "boolean" },
+                  "autoOgImage": { "type": "boolean" },
+                  "bannerUrl": { "type": "string" }
+                }
+              }
+            ]
+          }
+        },
         "moreRepos": { "type": "array", "items": { "type": "string" }, "maxItems": 8 }
+      }
+    },
+    "projects": {
+      "type": "object",
+      "required": ["bannersEnabled", "autoOgImages", "bannerHeight"],
+      "properties": {
+        "bannersEnabled": { "type": "boolean" },
+        "autoOgImages": { "type": "boolean" },
+        "bannerHeight": { "type": "integer", "minimum": 112, "maximum": 260 }
       }
     },
     "profile": {

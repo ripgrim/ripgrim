@@ -9,7 +9,7 @@ const OUT = path.join(ROOT, 'profile', 'generated');
 const CACHE = path.join(ROOT, 'profile', 'github-cache.json');
 const config = JSON.parse(await readFile(path.join(ROOT, 'profile.config.json'), 'utf8'));
 const monoFont = (await readFile(path.join(ROOT, 'fonts', 'CommitMono-Regular.woff2'))).toString('base64');
-const { github, profile, theme: c, motion, effects, layout } = config;
+const { github, projects, profile, theme: c, motion, effects, layout } = config;
 const W = layout.width;
 const speed = Math.max(0.05, motion.speed || 1);
 const seconds = (value) => `${(value / speed).toFixed(2)}s`;
@@ -20,6 +20,10 @@ const esc = (value = '') => String(value)
 const clamp = (value = '', max) => String(value).length > max ? `${String(value).slice(0, max - 1)}…` : String(value);
 const compact = (n = 0) => n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}k` : String(n);
 const date = (value) => new Intl.DateTimeFormat('en', { month: 'short', day: '2-digit', timeZone: 'UTC' }).format(new Date(value));
+const featuredOption = (entry) => typeof entry === 'string'
+  ? { repo: entry, solidButton: false, showBanner: true, autoOgImage: true, bannerUrl: '' }
+  : entry;
+const repoKey = (entry) => typeof entry === 'string' ? entry : entry.repo;
 
 function wrap(text, max = 42, lines = 2) {
   const source = String(text || 'No description yet.');
@@ -47,7 +51,7 @@ async function githubJson(endpoint) {
 }
 
 async function loadGithubData() {
-  const names = [...new Set([...github.featuredRepos, ...github.moreRepos])];
+  const names = [...new Set([...github.featuredRepos.map(repoKey), ...github.moreRepos.map(repoKey)])];
   try {
     const rawUser = await githubJson(`/users/${github.username}`);
     const user = { login: rawUser.login, public_repos: rawUser.public_repos, followers: rawUser.followers, following: rawUser.following };
@@ -221,21 +225,34 @@ function statCell(x, y, width, height, label, value, rightEdge = false, valueCla
   return `<g><line x1="${x}" x2="${x + width}" y1="${y + height + .5}" y2="${y + height + .5}" stroke="${c.line}"/><line x1="${x + width + .5}" x2="${x + width + .5}" y1="${y}" y2="${y + height}" stroke="${rightEdge ? 'none' : c.line}"/><text x="${x + 16}" y="${y + 27}" class="micro t3">${esc(label)}</text><text x="${x + 16}" y="${y + 62}" class="code ${valueClass}" font-size="24">${esc(clamp(value, 14))}</text></g>`;
 }
 
-function projectSvg(repo, index) {
+function projectSvg(repo) {
   const width = layout.projectColumns === 2 ? W / 2 : W;
-  const H = 240;
+  const banner = repo.__banner;
+  const bannerHeight = banner ? projects.bannerHeight : 0;
+  const offset = bannerHeight;
+  const H = 240 + offset;
   const lines = wrap(repo.description, width < 600 ? 47 : 94, 2);
   const col = width / 3;
-  const primary = index % Math.max(1, layout.projectColumns) === 0;
-  const body = `${panelHead(width, repo.name, layout.showUpdatedAt ? `updated ${date(repo.updated_at)}` : '')}
-    <text x="20" y="78" class="sans title t1">${esc(clamp(repo.name, 28))}</text>
-    <text x="20" y="108" class="sans body t2">${esc(lines[0] || '')}</text><text x="20" y="128" class="sans body t2">${esc(lines[1] || '')}</text>
-    <line x1="0" x2="${width}" y1="139.5" y2="139.5" stroke="${c.line}"/>
-    ${metaCell(0, 140, col, 'Language', repo.language || 'mixed')}${metaCell(col, 140, col, 'Stars', compact(repo.stargazers_count))}${metaCell(col * 2, 140, width - col * 2, 'Updated', date(repo.updated_at), true)}
-    <line x1="0" x2="${width}" y1="197.5" y2="197.5" stroke="${c.line}"/>
-    <text x="12" y="224" class="code-sm t3">${esc(repo.full_name)}</text>
-    ${primary ? `<rect x="${width - 122}" y="204" width="110" height="30" fill="${c.accent}" stroke="#d9b400"/><text x="${width - 67}" y="224" text-anchor="middle" class="label" fill="#161512">Open repo ↗</text>` : `<text x="${width - 12}" y="224" text-anchor="end" class="label t2">View source ↗</text>`}`;
+  const primary = Boolean(repo.__options.solidButton);
+  const bannerVisual = banner?.kind === 'image'
+    ? `<image x="0" y="38" width="${width}" height="${bannerHeight}" preserveAspectRatio="xMidYMid slice" href="data:${banner.mime};base64,${banner.data}"/>`
+    : banner ? generatedProjectBanner(repo, width, bannerHeight) : '';
+  const bannerMarkup = banner ? `${bannerVisual}<line x1="0" x2="${width}" y1="${38 + bannerHeight + .5}" y2="${38 + bannerHeight + .5}" stroke="${c.line}"/>` : '';
+  const body = `${panelHead(width, repo.name, layout.showUpdatedAt ? `updated ${date(repo.updated_at)}` : '')}${bannerMarkup}
+    <text x="20" y="${78 + offset}" class="sans title t1">${esc(clamp(repo.name, 28))}</text>
+    <text x="20" y="${108 + offset}" class="sans body t2">${esc(lines[0] || '')}</text><text x="20" y="${128 + offset}" class="sans body t2">${esc(lines[1] || '')}</text>
+    <line x1="0" x2="${width}" y1="${139.5 + offset}" y2="${139.5 + offset}" stroke="${c.line}"/>
+    ${metaCell(0, 140 + offset, col, 'Language', repo.language || 'mixed')}${metaCell(col, 140 + offset, col, 'Stars', compact(repo.stargazers_count))}${metaCell(col * 2, 140 + offset, width - col * 2, 'Updated', date(repo.updated_at), true)}
+    <line x1="0" x2="${width}" y1="${197.5 + offset}" y2="${197.5 + offset}" stroke="${c.line}"/>
+    <text x="12" y="${224 + offset}" class="code-sm t3">${esc(repo.full_name)}</text>
+    ${primary ? `<rect x="${width - 122}" y="${204 + offset}" width="110" height="30" fill="${c.accent}" stroke="#d9b400"/><text x="${width - 67}" y="${224 + offset}" text-anchor="middle" class="label" fill="#161512">Open repo ↗</text>` : `<text x="${width - 12}" y="${224 + offset}" text-anchor="end" class="label t2">View source ↗</text>`}`;
   return shell(width, H, `${repo.full_name}: ${repo.description || 'GitHub repository'}`, body);
+}
+
+function generatedProjectBanner(repo, width, height) {
+  const owner = repo.full_name.split('/')[0];
+  const marks = Array.from({ length: Math.ceil(width / 12) }, (_, index) => `<rect x="${index * 12}" y="${height - 10 - (index % 5) * 7}" width="4" height="4" fill="${index % 3 ? c.selected : c.accent}"/>`).join('');
+  return `<g transform="translate(0 38)"><rect width="${width}" height="${height}" fill="${c.well}"/><text x="18" y="34" class="micro t3">${esc(owner)}</text><text x="18" y="74" class="sans title t1">${esc(clamp(repo.name, 26))}</text><text x="18" y="101" class="code-sm t2">${esc(repo.language || 'repository')}</text>${marks}</g>`;
 }
 
 function metaCell(x, y, width, label, value, last = false) {
@@ -255,8 +272,8 @@ function reposSvg(repos) {
   return shell(W, H, `More repositories by ${github.username}`, `${panelHead(W, 'more repositories', `${repos.length} selected`)}${headings}${rows}`);
 }
 
-function linkSvg(label, index, width = W / 4) {
-  return shell(width, 68, label, `<text x="12" y="22" class="micro accent">${String(index + 1).padStart(2, '0')}</text><text x="12" y="51" class="label t1">${esc(label)} ↗</text>`);
+function linkSvg(label, width = W / 4) {
+  return shell(width, 68, label, `<text x="12" y="41" class="label t1">${esc(label)} ↗</text>`);
 }
 
 function readme(featured, more, links) {
@@ -273,19 +290,56 @@ ${projects}
 <a href="https://github.com/${github.username}?tab=repositories"><img src="./profile/generated/repos.svg" width="100%" alt="Selected repositories by ${github.username}"></a>
 
 <p align="center">${linkCells}</p>
-
-<p align="center"><sub>generated from <a href="./profile.config.json"><code>profile.config.json</code></a> · repository data refreshes automatically every day</sub></p>
 `;
 }
 
 await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
-const featured = github.featuredRepos.map((name) => data.repos[name]).filter(Boolean);
-const more = github.moreRepos.map((name) => data.repos[name]).filter(Boolean);
+async function fetchBannerImage(url) {
+  const response = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 animated-profile-readme' } });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const mime = (response.headers.get('content-type') || 'image/png').split(';')[0];
+  if (!['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(mime)) throw new Error(`unsupported content type ${mime}`);
+  const bytes = Buffer.from(await response.arrayBuffer());
+  if (bytes.length > 5_000_000) throw new Error('image exceeds 5 MB');
+  return { kind: 'image', mime, data: bytes.toString('base64') };
+}
+
+async function discoverOgImage(repo) {
+  const response = await fetch(repo.html_url, { headers: { 'User-Agent': 'Mozilla/5.0 animated-profile-readme' } });
+  if (!response.ok) throw new Error(`repository page HTTP ${response.status}`);
+  const html = await response.text();
+  const match = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+    || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+  if (!match) throw new Error('og:image metadata not found');
+  return match[1].replaceAll('&amp;', '&');
+}
+
+async function loadBanner(option, repo) {
+  if (!projects.bannersEnabled || !option.showBanner) return null;
+  const custom = option.bannerUrl?.trim();
+  const auto = projects.autoOgImages && option.autoOgImage;
+  if (!custom && !auto) return { kind: 'generated' };
+  try {
+    const url = custom || await discoverOgImage(repo);
+    return await fetchBannerImage(url);
+  } catch (error) {
+    console.warn(`Using generated banner for ${repo.full_name}: ${error.message}`);
+    return { kind: 'generated' };
+  }
+}
+
+const featured = (await Promise.all(github.featuredRepos.map(async (entry) => {
+  const option = featuredOption(entry);
+  const repo = data.repos[option.repo];
+  if (!repo) return null;
+  return { ...repo, __options: option, __banner: await loadBanner(option, repo) };
+}))).filter(Boolean);
+const more = github.moreRepos.map((entry) => data.repos[repoKey(entry)]).filter(Boolean);
 const links = profile.links.slice(0, 6);
 await writeFile(path.join(OUT, 'header.svg'), headerSvg());
-await Promise.all(featured.map((repo, index) => writeFile(path.join(OUT, `project-${String(index + 1).padStart(2, '0')}.svg`), projectSvg(repo, index))));
+await Promise.all(featured.map((repo, index) => writeFile(path.join(OUT, `project-${String(index + 1).padStart(2, '0')}.svg`), projectSvg(repo))));
 await writeFile(path.join(OUT, 'repos.svg'), reposSvg(more));
-await Promise.all(links.map((link, index) => writeFile(path.join(OUT, `link-${String(index + 1).padStart(2, '0')}.svg`), linkSvg(link.label, index, W / links.length))));
+await Promise.all(links.map((link, index) => writeFile(path.join(OUT, `link-${String(index + 1).padStart(2, '0')}.svg`), linkSvg(link.label, W / links.length))));
 await writeFile(path.join(ROOT, 'README.md'), readme(featured, more, links));
 console.log(`Built Sodium profile for @${github.username}: ${featured.length} featured + ${more.length} more repositories.`);

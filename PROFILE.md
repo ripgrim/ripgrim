@@ -4,8 +4,9 @@ The README and SVG panels are generated from [`profile.config.json`](./profile.c
 
 ## Change what appears
 
-- `github.featuredRepos`: large highlighted project cards, in order.
+- `github.featuredRepos`: highlighted project cards, in order. Each entry can set `solidButton`, `showBanner`, `autoOgImage`, and `bannerUrl`.
 - `github.moreRepos`: compact repository list.
+- `projects`: global banner enablement, automatic GitHub Open Graph image lookup, and banner height.
 - `profile`: name, intro, status, focus, state, and the complete bottom `links` strip. Add, remove, reorder, relabel, or retarget links directly in the config (up to six).
 - `theme`: Sodium surface, text, rule, status, and aurora colors.
 - `motion`: global speed, aurora loop duration/FPS, and pending-mark timing.
@@ -13,6 +14,20 @@ The README and SVG panels are generated from [`profile.config.json`](./profile.c
 - `layout`: width and optional metadata.
 
 Repository names can be `name` (uses `github.username`) or `owner/name`. This works for organizations and other accounts, for example `Boring-Software-Inc/dither-kit`.
+
+A featured repository may be a plain string or an object:
+
+```json
+{
+  "repo": "Boring-Software-Inc/dither-kit",
+  "solidButton": false,
+  "showBanner": true,
+  "autoOgImage": true,
+  "bannerUrl": ""
+}
+```
+
+`bannerUrl` overrides automatic discovery when non-empty. A banner renders only when both the global `projects.bannersEnabled` switch and the entry's `showBanner` switch are enabled. Automatic GitHub Open Graph lookup additionally requires both `projects.autoOgImages` and `autoOgImage`.
 
 ## Preview locally
 
