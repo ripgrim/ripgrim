@@ -5,13 +5,13 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { deflateSync } from 'node:zlib';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const GENERATOR_FILE = fileURLToPath(import.meta.url);
+const ROOT = path.resolve(path.dirname(GENERATOR_FILE), '..');
 const OUT = path.join(ROOT, 'profile', 'generated');
 const CACHE = path.join(ROOT, 'profile', 'github-cache.json');
 const config = JSON.parse(await readFile(path.join(ROOT, 'profile.config.json'), 'utf8'));
 const monoFont = (await readFile(path.join(ROOT, 'fonts', 'CommitMono-Regular.woff2'))).toString('base64');
 const { github, projects, profile, theme: c, motion, effects, layout } = config;
-const assetVersion = createHash('sha256').update(JSON.stringify(config)).digest('hex').slice(0, 10);
 const W = layout.width;
 const speed = Math.max(0.05, motion.speed || 1);
 const seconds = (value) => `${(value / speed).toFixed(2)}s`;
@@ -89,6 +89,13 @@ async function loadGithubData() {
 }
 
 const data = await loadGithubData();
+const generatorSource = await readFile(GENERATOR_FILE, 'utf8');
+const assetVersion = createHash('sha256')
+  .update(JSON.stringify(config))
+  .update(JSON.stringify(data))
+  .update(generatorSource)
+  .digest('hex')
+  .slice(0, 10);
 
 function style() {
   return `<style>
