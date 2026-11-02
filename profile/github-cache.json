@@ -1,0 +1,98 @@
+{
+  "user": {
+    "login": "ripgrim",
+    "public_repos": 104,
+    "followers": 102,
+    "following": 96
+  },
+  "repos": {
+    "fx": {
+      "name": "fx",
+      "full_name": "ripgrim/fx",
+      "html_url": "https://github.com/ripgrim/fx",
+      "description": "Unix like coding agent",
+      "language": "Zig",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "updated_at": "2026-09-08T17:24:53Z",
+      "topics": []
+    },
+    "anon-kode": {
+      "name": "anon-kode",
+      "full_name": "ripgrim/anon-kode",
+      "html_url": "https://github.com/ripgrim/anon-kode",
+      "description": "koding with any LLMs",
+      "language": "TypeScript",
+      "stargazers_count": 82,
+      "forks_count": 52,
+      "updated_at": "2026-10-25T18:48:14Z",
+      "topics": []
+    },
+    "canvas": {
+      "name": "canvas",
+      "full_name": "ripgrim/canvas",
+      "html_url": "https://github.com/ripgrim/canvas",
+      "description": "React and DOM design canvas with repository-backed editing",
+      "language": "TypeScript",
+      "stargazers_count": 1,
+      "forks_count": 0,
+      "updated_at": "2026-10-14T22:28:43Z",
+      "topics": []
+    },
+    "lab": {
+      "name": "lab",
+      "full_name": "ripgrim/lab",
+      "html_url": "https://github.com/ripgrim/lab",
+      "description": "thank u justin",
+      "language": "TypeScript",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "updated_at": "2026-11-02T00:09:14Z",
+      "topics": []
+    },
+    "better-env": {
+      "name": "better-env",
+      "full_name": "ripgrim/better-env",
+      "html_url": "https://github.com/ripgrim/better-env",
+      "description": null,
+      "language": "TypeScript",
+      "stargazers_count": 4,
+      "forks_count": 0,
+      "updated_at": "2026-07-30T18:19:31Z",
+      "topics": []
+    },
+    "ripgrim-com": {
+      "name": "ripgrim-com",
+      "full_name": "ripgrim/ripgrim-com",
+      "html_url": "https://github.com/ripgrim/ripgrim-com",
+      "description": null,
+      "language": "TypeScript",
+      "stargazers_count": 2,
+      "forks_count": 0,
+      "updated_at": "2026-08-21T20:19:19Z",
+      "topics": []
+    },
+    "disrecord": {
+      "name": "disrecord",
+      "full_name": "ripgrim/disrecord",
+      "html_url": "https://github.com/ripgrim/disrecord",
+      "description": "record discord calls with audio",
+      "language": "TypeScript",
+      "stargazers_count": 7,
+      "forks_count": 0,
+      "updated_at": "2026-07-28T00:21:52Z",
+      "topics": []
+    },
+    "spotless": {
+      "name": "spotless",
+      "full_name": "ripgrim/spotless",
+      "html_url": "https://github.com/ripgrim/spotless",
+      "description": "keep your downloads folder spotless",
+      "language": "TypeScript",
+      "stargazers_count": 11,
+      "forks_count": 1,
+      "updated_at": "2026-10-03T06:01:20Z",
+      "topics": []
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "./profile.config.schema.json",
+  "github": {
+    "username": "ripgrim",
+    "featuredRepos": ["fx", "anon-kode", "spotless", "canvas"],
+    "moreRepos": ["lab", "ripgrim-com", "better-env", "disrecord"]
+  },
+  "profile": {
+    "name": "grim",
+    "handle": "@ripgrim",
+    "role": "designer · developer · practical impracticality",
+    "intro": "Designer and developer exploring practical impracticality.",
+    "status": "building weird, useful software",
+    "focus": "tools",
+    "state": "active",
+    "links": [
+      { "label": "github", "url": "https://github.com/ripgrim" },
+      { "label": "skills", "url": "https://github.com/ripgrim/ripgrim/tree/main/.skills" }
+    ]
+  },
+  "theme": {
+    "page": "#141412",
+    "panel": "#1c1b19",
+    "well": "#22211e",
+    "text1": "#f5f3ee",
+    "text2": "#c4c0b6",
+    "text3": "#a19c90",
+    "line": "#2c2a25",
+    "lineFaint": "#22211e",
+    "accent": "#ffd400",
+    "accentText": "#ffd400",
+    "selected": "#3a3107",
+    "ok": "#8cc79a",
+    "warn": "#ff9a52",
+    "fail": "#ff6b57",
+    "languageFallback": "#a19c90",
+    "auroraPalette": ["#141412", "#3a3107", "#8b7300", "#ffd400", "#f5f3ee"]
+  },
+  "motion": {
+    "enabled": true,
+    "speed": 1,
+    "auroraDuration": 9,
+    "auroraFrames": 8,
+    "pendingDuration": 0.8
+  },
+  "effects": {
+    "dither": true,
+    "ditherScale": 4,
+    "ditherStrength": 0.9,
+    "animatedAurora": true,
+    "pendingMark": true
+  },
+  "layout": {
+    "width": 880,
+    "projectColumns": 2,
+    "showStats": true,
+    "showUpdatedAt": true
+  }
+}

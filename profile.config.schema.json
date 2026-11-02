@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Animated GitHub profile configuration",
+  "type": "object",
+  "required": ["github", "profile", "theme", "motion", "effects", "layout"],
+  "properties": {
+    "github": {
+      "type": "object",
+      "required": ["username", "featuredRepos", "moreRepos"],
+      "properties": {
+        "username": { "type": "string", "minLength": 1 },
+        "featuredRepos": { "type": "array", "items": { "type": "string" }, "maxItems": 8 },
+        "moreRepos": { "type": "array", "items": { "type": "string" }, "maxItems": 8 }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "required": ["name", "handle", "role", "intro", "status", "focus", "state", "links"],
+      "properties": {
+        "name": { "type": "string" },
+        "handle": { "type": "string" },
+        "role": { "type": "string" },
+        "intro": { "type": "string" },
+        "status": { "type": "string" },
+        "focus": { "type": "string" },
+        "state": { "type": "string" },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "url"],
+            "properties": {
+              "label": { "type": "string" },
+              "url": { "type": "string", "format": "uri" }
+            }
+          }
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "required": ["page", "panel", "well", "text1", "text2", "text3", "line", "lineFaint", "accent", "selected", "ok", "warn", "fail", "languageFallback", "auroraPalette"],
+      "properties": {
+        "auroraPalette": { "type": "array", "minItems": 2, "maxItems": 8, "items": { "type": "string" } }
+      },
+      "additionalProperties": { "type": ["string", "array"] }
+    },
+    "motion": {
+      "type": "object",
+      "required": ["enabled", "speed", "auroraDuration", "auroraFrames", "pendingDuration"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "speed": { "type": "number", "exclusiveMinimum": 0 },
+        "auroraDuration": { "type": "number", "exclusiveMinimum": 0 },
+        "auroraFrames": { "type": "integer", "minimum": 2, "maximum": 16 },
+        "pendingDuration": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "effects": {
+      "type": "object",
+      "required": ["dither", "ditherScale", "ditherStrength", "animatedAurora", "pendingMark"],
+      "properties": {
+        "dither": { "type": "boolean" },
+        "ditherScale": { "type": "integer", "minimum": 2, "maximum": 8 },
+        "ditherStrength": { "type": "number", "minimum": 0, "maximum": 1 },
+        "animatedAurora": { "type": "boolean" },
+        "pendingMark": { "type": "boolean" }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "required": ["width", "projectColumns", "showStats", "showUpdatedAt"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 600, "maximum": 1200 },
+        "projectColumns": { "enum": [1, 2] },
+        "showStats": { "type": "boolean" },
+        "showUpdatedAt": { "type": "boolean" }
+      }
+    }
+  }
+}
