@@ -138,25 +138,70 @@ function pngChunk(type, data = Buffer.alloc(0)) {
   checksum.writeUInt32BE(crc32(Buffer.concat([name, data])));
   return Buffer.concat([length, name, data, checksum]);
 }
-function palettePng(index, width, height, palette) {
+function paletteHeader(width, height) {
   const header = Buffer.alloc(13);
   header.writeUInt32BE(width, 0);
   header.writeUInt32BE(height, 4);
   header[8] = 8;
   header[9] = 3;
-  const colors = Buffer.from(palette.flatMap((hex) => [1, 3, 5].map((start) => Number.parseInt(hex.slice(start, start + 2), 16))));
+  return header;
+}
+function paletteBytes(palette) {
+  return Buffer.from(palette.flatMap((hex) => [1, 3, 5].map((start) => Number.parseInt(hex.slice(start, start + 2), 16))));
+}
+function indexedRows(index, width, height) {
   const rows = Buffer.alloc((width + 1) * height);
   for (let y = 0; y < height; y++) {
     rows[y * (width + 1)] = 0;
     Buffer.from(index.buffer, index.byteOffset + y * width, width).copy(rows, y * (width + 1) + 1);
   }
+  return rows;
+}
+function palettePng(index, width, height, palette) {
   return Buffer.concat([
     Buffer.from([137,80,78,71,13,10,26,10]),
-    pngChunk('IHDR', header),
-    pngChunk('PLTE', colors),
-    pngChunk('IDAT', deflateSync(rows, { level: 9 })),
+    pngChunk('IHDR', paletteHeader(width, height)),
+    pngChunk('PLTE', paletteBytes(palette)),
+    pngChunk('IDAT', deflateSync(indexedRows(index, width, height), { level: 9 })),
     pngChunk('IEND'),
   ]).toString('base64');
+}
+function animatedPalettePng(frames, order, width, height, palette, fps) {
+  const animation = Buffer.alloc(8);
+  animation.writeUInt32BE(order.length, 0);
+  animation.writeUInt32BE(0, 4);
+  const chunks = [
+    Buffer.from([137,80,78,71,13,10,26,10]),
+    pngChunk('IHDR', paletteHeader(width, height)),
+    pngChunk('PLTE', paletteBytes(palette)),
+    pngChunk('acTL', animation),
+  ];
+  let sequence = 0;
+  const delayNumerator = 1000;
+  const delayDenominator = Math.min(65535, Math.max(1, Math.round(fps * 1000)));
+  order.forEach((frameIndex, index) => {
+    const control = Buffer.alloc(26);
+    control.writeUInt32BE(sequence++, 0);
+    control.writeUInt32BE(width, 4);
+    control.writeUInt32BE(height, 8);
+    control.writeUInt32BE(0, 12);
+    control.writeUInt32BE(0, 16);
+    control.writeUInt16BE(delayNumerator, 20);
+    control.writeUInt16BE(delayDenominator, 22);
+    control[24] = 0;
+    control[25] = 0;
+    chunks.push(pngChunk('fcTL', control));
+    const compressed = deflateSync(indexedRows(frames[frameIndex].pixels, width, height), { level: 9 });
+    if (index === 0) chunks.push(pngChunk('IDAT', compressed));
+    else {
+      const frameData = Buffer.alloc(compressed.length + 4);
+      frameData.writeUInt32BE(sequence++, 0);
+      compressed.copy(frameData, 4);
+      chunks.push(pngChunk('fdAT', frameData));
+    }
+  });
+  chunks.push(pngChunk('IEND'));
+  return Buffer.concat(chunks).toString('base64');
 }
 function auroraFrame(time, width = W, height = 252) {
   const cell = effects.ditherScale;
@@ -182,7 +227,7 @@ function auroraFrame(time, width = W, height = 252) {
       pixels[py * cols + px] = Math.min(c.auroraPalette.length - 1, base + (scaled - base > threshold ? 1 : 0));
     }
   }
-  return { data: palettePng(pixels, cols, rows, c.auroraPalette), cols, rows };
+  return { pixels, data: palettePng(pixels, cols, rows, c.auroraPalette), cols, rows };
 }
 
 function aurora(width = W, height = 252) {
@@ -191,14 +236,11 @@ function aurora(width = W, height = 252) {
   const count = effects.animatedAurora && motion.enabled ? Math.floor(targetSteps / 2) + 1 : 1;
   const phaseSpan = 16.8;
   const frames = Array.from({ length: count }, (_, index) => auroraFrame(count === 1 ? 0 : index * phaseSpan / (count - 1), width, height));
-  const image = (frame, extra = '') => `<image x="0" y="0" width="${width}" height="${height}" preserveAspectRatio="none" href="data:image/png;base64,${frame.data}" ${extra}/>`;
-  if (count === 1) return image(frames[0]);
+  const image = (data, extra = '') => `<image x="0" y="0" width="${width}" height="${height}" preserveAspectRatio="none" href="data:image/png;base64,${data}" ${extra}/>`;
+  if (count === 1) return image(frames[0].data);
   const order = [...Array(count).keys(), ...Array.from({ length: count - 2 }, (_, i) => count - 2 - i)];
-  const keyTimes = order.map((_, i) => (i / (order.length - 1)).toFixed(5)).join(';');
-  return frames.map((frame, index) => {
-    const values = order.map((active) => active === index ? 1 : 0).join(';');
-    return image(frame, `opacity="${index === 0 ? 1 : 0}" class="motion"`) .replace('/>', `><animate attributeName="opacity" values="${values}" keyTimes="${keyTimes}" dur="${seconds(motion.auroraDuration)}" calcMode="discrete" repeatCount="indefinite"/></image>`);
-  }).join('') + image(frames[0], 'class="reduced" style="display:none"');
+  const animated = animatedPalettePng(frames, order, frames[0].cols, frames[0].rows, c.auroraPalette, motion.auroraFps * speed);
+  return image(animated, 'class="motion"') + image(frames[0].data, 'class="reduced" style="display:none"');
 }
 
 function headerSvg() {

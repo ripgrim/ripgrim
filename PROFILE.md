@@ -47,6 +47,6 @@ Then open `README.md` on GitHub, or open the files in `profile/generated/` direc
 
 `.github/workflows/main.yml` runs daily and on configuration/generator changes. It fetches current descriptions, languages, stars, forks, update dates, and account totals from the GitHub API, rebuilds the assets, and commits only when output changes.
 
-SVG motion uses SMIL because GitHub profile READMEs strip JavaScript and inline page CSS. The aurora is rendered as discrete ordered-dither frames, while `prefers-reduced-motion` shows a still first frame. The rest of the profile follows Sodium's square, ruled, warm near-black system with Commit Mono embedded directly in each SVG.
+GitHub profile READMEs strip JavaScript and inline page CSS. The aurora is therefore packed into one animated indexed PNG inside the header SVG, while `prefers-reduced-motion` swaps in one still first frame. The rest of the profile follows Sodium's square, ruled, warm near-black system with Commit Mono embedded directly in each SVG.
 
 Commit Mono is included under its MIT license in `fonts/CommitMono-LICENSE`.
