@@ -17,17 +17,6 @@
       "updated_at": "2026-10-28T04:00:10Z",
       "topics": []
     },
-    "Boring-Software-Inc/v2": {
-      "name": "v2",
-      "full_name": "Boring-Software-Inc/v2",
-      "html_url": "https://github.com/Boring-Software-Inc/v2",
-      "description": null,
-      "language": "TypeScript",
-      "stargazers_count": 2,
-      "forks_count": 2,
-      "updated_at": "2026-10-28T00:13:34Z",
-      "topics": []
-    },
     "ripgrim-com": {
       "name": "ripgrim-com",
       "full_name": "ripgrim/ripgrim-com",
@@ -48,6 +37,17 @@
       "stargazers_count": 0,
       "forks_count": 0,
       "updated_at": "2026-11-02T00:09:14Z",
+      "topics": []
+    },
+    "Boring-Software-Inc/v2": {
+      "name": "v2",
+      "full_name": "Boring-Software-Inc/v2",
+      "html_url": "https://github.com/Boring-Software-Inc/v2",
+      "description": null,
+      "language": "TypeScript",
+      "stargazers_count": 2,
+      "forks_count": 2,
+      "updated_at": "2026-10-28T00:13:34Z",
       "topics": []
     }
   }
