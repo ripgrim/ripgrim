@@ -28,26 +28,15 @@
       "updated_at": "2026-08-21T20:19:19Z",
       "topics": []
     },
-    "better-env": {
-      "name": "better-env",
-      "full_name": "ripgrim/better-env",
-      "html_url": "https://github.com/ripgrim/better-env",
+    "boring-software-inc/v2": {
+      "name": "v2",
+      "full_name": "Boring-Software-Inc/v2",
+      "html_url": "https://github.com/Boring-Software-Inc/v2",
       "description": null,
       "language": "TypeScript",
-      "stargazers_count": 4,
-      "forks_count": 0,
-      "updated_at": "2026-07-30T18:19:31Z",
-      "topics": []
-    },
-    "disrecord": {
-      "name": "disrecord",
-      "full_name": "ripgrim/disrecord",
-      "html_url": "https://github.com/ripgrim/disrecord",
-      "description": "record discord calls with audio",
-      "language": "TypeScript",
-      "stargazers_count": 7,
-      "forks_count": 0,
-      "updated_at": "2026-07-28T00:21:52Z",
+      "stargazers_count": 2,
+      "forks_count": 2,
+      "updated_at": "2026-10-28T00:13:34Z",
       "topics": []
     },
     "lab": {
