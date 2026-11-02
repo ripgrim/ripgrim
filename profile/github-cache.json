@@ -6,26 +6,15 @@
     "following": 96
   },
   "repos": {
-    "fx": {
-      "name": "fx",
-      "full_name": "ripgrim/fx",
-      "html_url": "https://github.com/ripgrim/fx",
-      "description": "Unix like coding agent",
-      "language": "Zig",
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "updated_at": "2026-09-08T17:24:53Z",
-      "topics": []
-    },
-    "spotless": {
-      "name": "spotless",
-      "full_name": "ripgrim/spotless",
-      "html_url": "https://github.com/ripgrim/spotless",
-      "description": "keep your downloads folder spotless",
+    "Boring-Software-Inc/dither-kit": {
+      "name": "dither-kit",
+      "full_name": "Boring-Software-Inc/dither-kit",
+      "html_url": "https://github.com/Boring-Software-Inc/dither-kit",
+      "description": "Composable, dithered charts for shadcn/ui — area, line, bar, pie & radar. Docs: tripwire.sh/dither-kit",
       "language": "TypeScript",
-      "stargazers_count": 11,
-      "forks_count": 1,
-      "updated_at": "2026-10-03T06:01:20Z",
+      "stargazers_count": 121,
+      "forks_count": 12,
+      "updated_at": "2026-10-28T04:00:10Z",
       "topics": []
     },
     "ripgrim-com": {
@@ -39,17 +28,6 @@
       "updated_at": "2026-08-21T20:19:19Z",
       "topics": []
     },
-    "disrecord": {
-      "name": "disrecord",
-      "full_name": "ripgrim/disrecord",
-      "html_url": "https://github.com/ripgrim/disrecord",
-      "description": "record discord calls with audio",
-      "language": "TypeScript",
-      "stargazers_count": 7,
-      "forks_count": 0,
-      "updated_at": "2026-07-28T00:21:52Z",
-      "topics": []
-    },
     "better-env": {
       "name": "better-env",
       "full_name": "ripgrim/better-env",
@@ -61,26 +39,15 @@
       "updated_at": "2026-07-30T18:19:31Z",
       "topics": []
     },
-    "anon-kode": {
-      "name": "anon-kode",
-      "full_name": "ripgrim/anon-kode",
-      "html_url": "https://github.com/ripgrim/anon-kode",
-      "description": "koding with any LLMs",
+    "disrecord": {
+      "name": "disrecord",
+      "full_name": "ripgrim/disrecord",
+      "html_url": "https://github.com/ripgrim/disrecord",
+      "description": "record discord calls with audio",
       "language": "TypeScript",
-      "stargazers_count": 82,
-      "forks_count": 52,
-      "updated_at": "2026-10-25T18:48:14Z",
-      "topics": []
-    },
-    "Boring-Software-Inc/dither-kit": {
-      "name": "dither-kit",
-      "full_name": "Boring-Software-Inc/dither-kit",
-      "html_url": "https://github.com/Boring-Software-Inc/dither-kit",
-      "description": "Composable, dithered charts for shadcn/ui — area, line, bar, pie & radar. Docs: tripwire.sh/dither-kit",
-      "language": "TypeScript",
-      "stargazers_count": 121,
-      "forks_count": 12,
-      "updated_at": "2026-10-28T04:00:10Z",
+      "stargazers_count": 7,
+      "forks_count": 0,
+      "updated_at": "2026-07-28T00:21:52Z",
       "topics": []
     },
     "lab": {
