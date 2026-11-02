@@ -21,7 +21,7 @@ const clamp = (value = '', max) => String(value).length > max ? `${String(value)
 const compact = (n = 0) => n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}k` : String(n);
 const date = (value) => new Intl.DateTimeFormat('en', { month: 'short', day: '2-digit', timeZone: 'UTC' }).format(new Date(value));
 const featuredOption = (entry) => typeof entry === 'string'
-  ? { repo: entry, solidButton: false, ctaLabel: 'View source', projectUrl: '', showBanner: true, autoOgImage: true, ogSourceUrl: '', bannerUrl: '' }
+  ? { repo: entry, solidButton: false, ctaLabel: 'View source', ctaArrow: '↗', showRepoPath: true, projectUrl: '', showBanner: true, autoOgImage: true, ogSourceUrl: '', bannerUrl: '' }
   : entry;
 const repoKey = (entry) => typeof entry === 'string' ? entry : entry.repo;
 
@@ -272,11 +272,13 @@ function projectSvg(repo) {
   const banner = repo.__banner;
   const bannerHeight = banner ? projects.bannerHeight : 0;
   const offset = bannerHeight;
-  const H = 240 + offset;
+  const ctaLabel = repo.__options.ctaLabel;
+  const showFooter = repo.__options.showRepoPath || ctaLabel != null;
+  const H = (showFooter ? 240 : 198) + offset;
   const lines = wrap(repo.description, width < 600 ? 47 : 94, 2);
   const col = width / 3;
   const primary = Boolean(repo.__options.solidButton);
-  const ctaLabel = repo.__options.ctaLabel;
+  const ctaText = ctaLabel == null ? '' : `${ctaLabel}${repo.__options.ctaArrow == null ? '' : ` ${repo.__options.ctaArrow}`}`;
   const bannerVisual = banner?.kind === 'image'
     ? `<rect x="0" y="38" width="${width}" height="${bannerHeight}" fill="${c.well}"/><image x="0" y="38" width="${width}" height="${bannerHeight}" preserveAspectRatio="xMidYMid ${projects.bannerFit === 'cover' ? 'slice' : 'meet'}" href="data:${banner.mime};base64,${banner.data}"/>`
     : banner ? generatedProjectBanner(repo, width, bannerHeight) : '';
@@ -286,9 +288,7 @@ function projectSvg(repo) {
     <text x="20" y="${108 + offset}" class="sans body t2">${esc(lines[0] || '')}</text><text x="20" y="${128 + offset}" class="sans body t2">${esc(lines[1] || '')}</text>
     <line x1="0" x2="${width}" y1="${139.5 + offset}" y2="${139.5 + offset}" stroke="${c.line}"/>
     ${metaCell(0, 140 + offset, col, 'Language', repo.language || 'mixed')}${metaCell(col, 140 + offset, col, 'Stars', compact(repo.stargazers_count))}${metaCell(col * 2, 140 + offset, width - col * 2, 'Updated', date(repo.updated_at), true)}
-    <line x1="0" x2="${width}" y1="${197.5 + offset}" y2="${197.5 + offset}" stroke="${c.line}"/>
-    <text x="12" y="${224 + offset}" class="code-sm t3">${esc(repo.full_name)}</text>
-    ${ctaLabel == null ? '' : primary ? `<rect x="${width - 142}" y="${204 + offset}" width="130" height="30" fill="${c.accent}" stroke="#d9b400"/><text x="${width - 77}" y="${224 + offset}" text-anchor="middle" class="label" fill="#161512">${esc(clamp(ctaLabel, 16))} ↗</text>` : `<text x="${width - 12}" y="${224 + offset}" text-anchor="end" class="label t2">${esc(clamp(ctaLabel, 18))} ↗</text>`}`;
+    ${showFooter ? `<line x1="0" x2="${width}" y1="${197.5 + offset}" y2="${197.5 + offset}" stroke="${c.line}"/>${repo.__options.showRepoPath ? `<text x="12" y="${224 + offset}" class="code-sm t3">${esc(repo.full_name)}</text>` : ''}${ctaLabel == null ? '' : primary ? `<rect x="${width - 142}" y="${204 + offset}" width="130" height="30" fill="${c.accent}" stroke="#d9b400"/><text x="${width - 77}" y="${224 + offset}" text-anchor="middle" class="label" fill="#161512">${esc(clamp(ctaText, 18))}</text>` : `<text x="${width - 12}" y="${224 + offset}" text-anchor="end" class="label t2">${esc(clamp(ctaText, 20))}</text>`}` : ''}`;
   return shell(width, H, `${repo.full_name}: ${repo.description || 'GitHub repository'}`, body);
 }
 

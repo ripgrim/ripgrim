@@ -17,11 +17,13 @@
               { "type": "string" },
               {
                 "type": "object",
-                "required": ["repo", "solidButton", "ctaLabel", "projectUrl", "showBanner", "autoOgImage", "ogSourceUrl", "bannerUrl"],
+                "required": ["repo", "solidButton", "ctaLabel", "ctaArrow", "showRepoPath", "projectUrl", "showBanner", "autoOgImage", "ogSourceUrl", "bannerUrl"],
                 "properties": {
                   "repo": { "type": "string", "minLength": 1 },
                   "solidButton": { "type": "boolean" },
                   "ctaLabel": { "type": ["string", "null"] },
+                  "ctaArrow": { "type": ["string", "null"] },
+                  "showRepoPath": { "type": "boolean" },
                   "projectUrl": { "type": "string" },
                   "showBanner": { "type": "boolean" },
                   "autoOgImage": { "type": "boolean" },

@@ -17,6 +17,8 @@ if (new Set(featuredKeys).size !== featuredKeys.length) throw new Error('github.
 for (const entry of config.github.featuredRepos.filter((item) => typeof item === 'object')) {
   if (typeof entry.solidButton !== 'boolean' || typeof entry.showBanner !== 'boolean' || typeof entry.autoOgImage !== 'boolean') throw new Error(`Featured repo ${entry.repo} is missing a boolean option`);
   if (entry.ctaLabel !== null && (typeof entry.ctaLabel !== 'string' || !entry.ctaLabel.trim())) throw new Error(`Featured repo ${entry.repo} ctaLabel must be text or null`);
+  if (entry.ctaArrow !== null && typeof entry.ctaArrow !== 'string') throw new Error(`Featured repo ${entry.repo} ctaArrow must be text or null`);
+  if (typeof entry.showRepoPath !== 'boolean') throw new Error(`Featured repo ${entry.repo} showRepoPath must be boolean`);
   for (const field of ['projectUrl', 'ogSourceUrl', 'bannerUrl']) {
     if (entry[field] && !URL.canParse(entry[field])) throw new Error(`Featured repo ${entry.repo} has an invalid ${field}`);
   }
