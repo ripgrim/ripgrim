@@ -15,7 +15,9 @@
     "state": "active",
     "links": [
       { "label": "github", "url": "https://github.com/ripgrim" },
-      { "label": "skills", "url": "https://github.com/ripgrim/ripgrim/tree/main/.skills" }
+      { "label": "skills", "url": "https://github.com/ripgrim/ripgrim/tree/main/.skills" },
+      { "label": "repos", "url": "https://github.com/ripgrim?tab=repositories" },
+      { "label": "config", "url": "https://github.com/ripgrim/ripgrim/blob/main/profile.config.json" }
     ]
   },
   "theme": {

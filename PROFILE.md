@@ -6,7 +6,7 @@ The README and SVG panels are generated from [`profile.config.json`](./profile.c
 
 - `github.featuredRepos`: large highlighted project cards, in order.
 - `github.moreRepos`: compact repository list.
-- `profile`: name, intro, status, focus, state, and links.
+- `profile`: name, intro, status, focus, state, and the complete bottom `links` strip. Add, remove, reorder, relabel, or retarget links directly in the config (up to six).
 - `theme`: Sodium surface, text, rule, status, and aurora colors.
 - `motion`: global speed, aurora loop duration/FPS, and pending-mark timing.
 - `effects`: ordered dithering, aurora animation, and pending-mark toggles.

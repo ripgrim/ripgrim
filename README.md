@@ -5,6 +5,6 @@
 
 <a href="https://github.com/ripgrim?tab=repositories"><img src="./profile/generated/repos.svg" width="100%" alt="Selected repositories by ripgrim"></a>
 
-<p align="center"><a href="https://github.com/ripgrim"><img src="./profile/generated/link-01.svg" width="25%" alt="github"></a><a href="https://github.com/ripgrim/ripgrim/tree/main/.skills"><img src="./profile/generated/link-02.svg" width="25%" alt="skills"></a><a href="https://github.com/ripgrim?tab=repositories"><img src="./profile/generated/link-03.svg" width="25%" alt="repos"></a><a href="./profile.config.json"><img src="./profile/generated/link-04.svg" width="25%" alt="config"></a></p>
+<p align="center"><a href="https://github.com/ripgrim"><img src="./profile/generated/link-01.svg" width="25%" alt="github"></a><a href="https://github.com/ripgrim/ripgrim/tree/main/.skills"><img src="./profile/generated/link-02.svg" width="25%" alt="skills"></a><a href="https://github.com/ripgrim?tab=repositories"><img src="./profile/generated/link-03.svg" width="25%" alt="repos"></a><a href="https://github.com/ripgrim/ripgrim/blob/main/profile.config.json"><img src="./profile/generated/link-04.svg" width="25%" alt="config"></a></p>
 
 <p align="center"><sub>generated from <a href="./profile.config.json"><code>profile.config.json</code></a> · repository data refreshes automatically every day</sub></p>
