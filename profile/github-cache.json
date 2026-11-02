@@ -6,6 +6,17 @@
     "following": 96
   },
   "repos": {
+    "ripgrim-com": {
+      "name": "ripgrim-com",
+      "full_name": "ripgrim/ripgrim-com",
+      "html_url": "https://github.com/ripgrim/ripgrim-com",
+      "description": null,
+      "language": "TypeScript",
+      "stargazers_count": 2,
+      "forks_count": 0,
+      "updated_at": "2026-08-21T20:19:19Z",
+      "topics": []
+    },
     "Boring-Software-Inc/dither-kit": {
       "name": "dither-kit",
       "full_name": "Boring-Software-Inc/dither-kit",
@@ -15,17 +26,6 @@
       "stargazers_count": 121,
       "forks_count": 12,
       "updated_at": "2026-10-28T04:00:10Z",
-      "topics": []
-    },
-    "Boring-Software-Inc/v2": {
-      "name": "v2",
-      "full_name": "Boring-Software-Inc/v2",
-      "html_url": "https://github.com/Boring-Software-Inc/v2",
-      "description": null,
-      "language": "TypeScript",
-      "stargazers_count": 2,
-      "forks_count": 2,
-      "updated_at": "2026-10-28T00:13:34Z",
       "topics": []
     },
     "lab": {
@@ -39,15 +39,15 @@
       "updated_at": "2026-11-02T00:09:14Z",
       "topics": []
     },
-    "ripgrim-com": {
-      "name": "ripgrim-com",
-      "full_name": "ripgrim/ripgrim-com",
-      "html_url": "https://github.com/ripgrim/ripgrim-com",
+    "Boring-Software-Inc/v2": {
+      "name": "v2",
+      "full_name": "Boring-Software-Inc/v2",
+      "html_url": "https://github.com/Boring-Software-Inc/v2",
       "description": null,
       "language": "TypeScript",
       "stargazers_count": 2,
-      "forks_count": 0,
-      "updated_at": "2026-08-21T20:19:19Z",
+      "forks_count": 2,
+      "updated_at": "2026-10-28T00:13:34Z",
       "topics": []
     }
   }
