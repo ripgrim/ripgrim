@@ -67,7 +67,7 @@
     "warn": "#b0b0b0",
     "fail": "#e0e0e0",
     "languageFallback": "#999999",
-    "auroraPalette": ["#121212", "#282828", "#505050", "#6f5d00", "#ffd400", "#f2f2f2"]
+    "auroraPalette": ["#121212", "#343434", "#5a5a5a", "#786700", "#c9a900", "#ffd400"]
   },
   "motion": {
     "enabled": true,
@@ -79,7 +79,7 @@
   "effects": {
     "dither": true,
     "ditherScale": 4,
-    "ditherStrength": 0.96,
+    "ditherStrength": 0.82,
     "animatedAurora": true,
     "pendingMark": true
   },

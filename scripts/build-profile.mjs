@@ -205,28 +205,83 @@ function animatedPalettePng(frames, order, width, height, palette, fps) {
   chunks.push(pngChunk('IEND'));
   return Buffer.concat(chunks).toString('base64');
 }
-function auroraFrame(time, width = W, height = 252) {
+const smooth01 = (edge0, edge1, value) => {
+  const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+};
+const hashNoise = (x, y, seed) => {
+  const value = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453123;
+  return value - Math.floor(value);
+};
+function valueNoise(x, y, seed = 0) {
+  const x0 = Math.floor(x);
+  const y0 = Math.floor(y);
+  const tx = x - x0;
+  const ty = y - y0;
+  const sx = tx * tx * (3 - 2 * tx);
+  const sy = ty * ty * (3 - 2 * ty);
+  const a = hashNoise(x0, y0, seed);
+  const b = hashNoise(x0 + 1, y0, seed);
+  const d = hashNoise(x0, y0 + 1, seed);
+  const e = hashNoise(x0 + 1, y0 + 1, seed);
+  const top = a + (b - a) * sx;
+  const bottom = d + (e - d) * sx;
+  return top + (bottom - top) * sy;
+}
+function fbm(x, y, seed) {
+  let total = 0;
+  let amplitude = .5;
+  let normalizer = 0;
+  for (let octave = 0; octave < 4; octave++) {
+    total += valueNoise(x, y, seed + octave * 17) * amplitude;
+    normalizer += amplitude;
+    x = x * 2.03 + 7.1;
+    y = y * 2.03 - 3.7;
+    amplitude *= .5;
+  }
+  return total / normalizer;
+}
+function auroraFrame(phase, width = W, height = 252) {
   const cell = effects.ditherScale;
   const cols = Math.ceil(width / cell);
   const rows = Math.ceil(height / cell);
   const pixels = new Uint8Array(cols * rows);
-  for (let py = 0; py < rows; py++) {
-    for (let px = 0; px < cols; px++) {
-      const u = px / cols;
-      const v = py / rows;
+  const time = 11 + phase;
+  const aspect = cols / rows;
+  const signedNoise = (x, y, seed) => valueNoise(x, y, seed) * 2 - 1;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const u = (col + .5) / cols;
+      const py = 1 - (row + .5) / rows;
+      const x = (u - .5) * aspect + time * .25 * .04;
       let light = 0;
       for (let i = 0; i < 4; i++) {
-        const edge = .28 + i * .075 + .07 * Math.sin(u * 7 + i * 1.7 + time * .18) + .035 * Math.sin(u * 23 - i * 2 + time * .1);
-        const above = v - edge;
-        const curtain = above > 0 ? Math.exp(-above * (7 + i * 1.7)) : Math.exp(above * 42);
-        const rays = .28 + .72 * Math.pow((Math.sin(u * (44 + i * 9) + i * 2.3 + time * .15) + 1) / 2, 2.4);
-        light += curtain * rays * (1 - i * .13);
+        const depth = i / 3;
+        const edge = .38 + i * .06
+          + 1.4 * .11 * signedNoise(x * .55 + i * 3.1, time * .035 + i * 1.7, 41)
+          + .8 * .05 * signedNoise(x * 2.1 - i * 1.3, time * .07 + i, 73);
+        const above = py - edge;
+        const curtain = above > 0
+          ? Math.exp(-Math.abs(above) * 4.12 * (1 + i * .4))
+          : Math.exp(-Math.abs(above) * 48);
+        const rayX = (x + signedNoise(x * .8, time * .03 + i, 101) * .74) * 12;
+        let ray = .2 + .8 * smooth01(.25, .75, fbm(rayX + i * 9, time * .045 + i, 131 + i * 11));
+        ray *= .75 + .25 * valueNoise(rayX * 3.2, i * 4 + time * .02, 173 + i * 7);
+        const patch = .3 + .7 * smooth01(.25, .7, fbm(x * .45 + i * 5, time * .02 + i * 2, 211 + i * 13));
+        const rim = Math.exp(-Math.abs(above) * 34) * 1.1;
+        const haze = above > 0 ? Math.exp(-Math.abs(above) * 5) * .09 : Math.exp(-Math.abs(above) * 14) * .05;
+        light += (curtain * ray + rim * (.5 + .5 * ray) + haze) * patch * (1 - .5 * depth);
       }
-      light = Math.min(1, light * effects.ditherStrength);
-      const scaled = light * (c.auroraPalette.length - 1);
+      let tone = (1 - Math.exp(-light * 1.25)) * effects.ditherStrength;
+      tone = smooth01(.035, .96, tone);
+      if (tone < .025) {
+        pixels[row * cols + col] = 0;
+        continue;
+      }
+      const scaled = tone * (c.auroraPalette.length - 1);
       const base = Math.floor(scaled);
-      const threshold = BAYER[py % 4][px % 4] / 16;
-      pixels[py * cols + px] = Math.min(c.auroraPalette.length - 1, base + (scaled - base > threshold ? 1 : 0));
+      const threshold = BAYER[row % 4][col % 4] / 16;
+      pixels[row * cols + col] = Math.min(c.auroraPalette.length - 1, base + (scaled - base > threshold ? 1 : 0));
     }
   }
   return { pixels, data: palettePng(pixels, cols, rows, c.auroraPalette), cols, rows };
@@ -236,7 +291,7 @@ function aurora(width = W, height = 252) {
   if (!effects.dither) return `<rect width="${width}" height="${height}" fill="${c.selected}"/>`;
   const targetSteps = Math.max(2, Math.round(motion.auroraDuration * motion.auroraFps));
   const count = effects.animatedAurora && motion.enabled ? Math.floor(targetSteps / 2) + 1 : 1;
-  const phaseSpan = 16.8;
+  const phaseSpan = 7.6;
   const frames = Array.from({ length: count }, (_, index) => auroraFrame(count === 1 ? 0 : index * phaseSpan / (count - 1), width, height));
   const image = (data, extra = '') => `<image x="0" y="0" width="${width}" height="${height}" preserveAspectRatio="none" href="data:image/png;base64,${data}" ${extra}/>`;
   if (count === 1) return image(frames[0].data);
