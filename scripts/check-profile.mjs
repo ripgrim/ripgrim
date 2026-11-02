@@ -12,6 +12,6 @@ if (!config.github?.username) throw new Error('github.username is required');
 if (!Array.isArray(config.github.featuredRepos) || !config.github.featuredRepos.length) throw new Error('Choose at least one github.featuredRepos entry');
 if (new Set(config.github.featuredRepos).size !== config.github.featuredRepos.length) throw new Error('github.featuredRepos contains duplicates');
 if ((config.motion?.speed || 0) <= 0) throw new Error('motion.speed must be greater than zero');
-if ((config.motion?.auroraFrames || 0) < 2) throw new Error('motion.auroraFrames must be at least two');
+if ((config.motion?.auroraFps || 0) < 1 || config.motion.auroraFps > 60) throw new Error('motion.auroraFps must be between 1 and 60');
 if (![1, 2].includes(config.layout?.projectColumns)) throw new Error('layout.projectColumns must be 1 or 2');
 console.log('profile.config.json looks good.');

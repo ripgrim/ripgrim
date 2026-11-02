@@ -8,11 +8,11 @@ The README and SVG panels are generated from [`profile.config.json`](./profile.c
 - `github.moreRepos`: compact repository list.
 - `profile`: name, intro, status, focus, state, and links.
 - `theme`: Sodium surface, text, rule, status, and aurora colors.
-- `motion`: global speed, aurora loop duration/frame count, and pending-mark timing.
+- `motion`: global speed, aurora loop duration/FPS, and pending-mark timing.
 - `effects`: ordered dithering, aurora animation, and pending-mark toggles.
 - `layout`: width and optional metadata.
 
-Repository names can be `name` (uses `github.username`) or `owner/name`.
+Repository names can be `name` (uses `github.username`) or `owner/name`. This works for organizations and other accounts, for example `Boring-Software-Inc/dither-kit`.
 
 ## Preview locally
 

@@ -2,6 +2,7 @@ import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { deflateSync } from 'node:zlib';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'profile', 'generated');
@@ -86,7 +87,7 @@ const data = await loadGithubData();
 function style() {
   return `<style>
     @font-face{font-family:Commit;src:url(data:font/woff2;base64,${monoFont}) format('woff2');font-weight:400}
-    text{font-family:Commit,ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:400}
+    text{font-family:Commit,ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:400}image{image-rendering:pixelated}
     .sans{font-family:Inter,"Segoe UI",Arial,sans-serif}.t1{fill:${c.text1}}.t2{fill:${c.text2}}.t3{fill:${c.text3}}.accent{fill:${c.accent}}.ok{fill:${c.ok}}
     .body{font-size:14px}.code{font-size:13px}.code-sm{font-size:12px}.label{font-size:12px;letter-spacing:.06em;text-transform:uppercase}.micro{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
     .title{font-size:24px;letter-spacing:-.025em}.display{font-size:56px;letter-spacing:-.04em}
@@ -115,11 +116,49 @@ function panelHead(width, name, meta = '', status = '') {
 }
 
 const BAYER = [[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
+const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
+  let value = n;
+  for (let bit = 0; bit < 8; bit++) value = value & 1 ? 0xedb88320 ^ (value >>> 1) : value >>> 1;
+  return value >>> 0;
+});
+function crc32(buffer) {
+  let crc = 0xffffffff;
+  for (const byte of buffer) crc = CRC_TABLE[(crc ^ byte) & 0xff] ^ (crc >>> 8);
+  return (crc ^ 0xffffffff) >>> 0;
+}
+function pngChunk(type, data = Buffer.alloc(0)) {
+  const name = Buffer.from(type);
+  const length = Buffer.alloc(4);
+  length.writeUInt32BE(data.length);
+  const checksum = Buffer.alloc(4);
+  checksum.writeUInt32BE(crc32(Buffer.concat([name, data])));
+  return Buffer.concat([length, name, data, checksum]);
+}
+function palettePng(index, width, height, palette) {
+  const header = Buffer.alloc(13);
+  header.writeUInt32BE(width, 0);
+  header.writeUInt32BE(height, 4);
+  header[8] = 8;
+  header[9] = 3;
+  const colors = Buffer.from(palette.flatMap((hex) => [1, 3, 5].map((start) => Number.parseInt(hex.slice(start, start + 2), 16))));
+  const rows = Buffer.alloc((width + 1) * height);
+  for (let y = 0; y < height; y++) {
+    rows[y * (width + 1)] = 0;
+    Buffer.from(index.buffer, index.byteOffset + y * width, width).copy(rows, y * (width + 1) + 1);
+  }
+  return Buffer.concat([
+    Buffer.from([137,80,78,71,13,10,26,10]),
+    pngChunk('IHDR', header),
+    pngChunk('PLTE', colors),
+    pngChunk('IDAT', deflateSync(rows, { level: 9 })),
+    pngChunk('IEND'),
+  ]).toString('base64');
+}
 function auroraFrame(time, width = W, height = 252) {
   const cell = effects.ditherScale;
   const cols = Math.ceil(width / cell);
   const rows = Math.ceil(height / cell);
-  const paths = Array.from({ length: c.auroraPalette.length }, () => []);
+  const pixels = new Uint8Array(cols * rows);
   for (let py = 0; py < rows; py++) {
     for (let px = 0; px < cols; px++) {
       const u = px / cols;
@@ -136,24 +175,26 @@ function auroraFrame(time, width = W, height = 252) {
       const scaled = light * (c.auroraPalette.length - 1);
       const base = Math.floor(scaled);
       const threshold = BAYER[py % 4][px % 4] / 16;
-      const index = Math.min(c.auroraPalette.length - 1, base + (scaled - base > threshold ? 1 : 0));
-      if (index > 0) paths[index].push(`M${px * cell} ${py * cell}h${cell - 1}v${cell - 1}h-${cell - 1}z`);
+      pixels[py * cols + px] = Math.min(c.auroraPalette.length - 1, base + (scaled - base > threshold ? 1 : 0));
     }
   }
-  return paths.map((parts, index) => parts.length ? `<path d="${parts.join('')}" fill="${c.auroraPalette[index]}"/>` : '').join('');
+  return { data: palettePng(pixels, cols, rows, c.auroraPalette), cols, rows };
 }
 
 function aurora(width = W, height = 252) {
   if (!effects.dither) return `<rect width="${width}" height="${height}" fill="${c.selected}"/>`;
-  const count = effects.animatedAurora && motion.enabled ? motion.auroraFrames : 1;
-  const frames = Array.from({ length: count }, (_, index) => auroraFrame(index * 2.4, width, height));
-  if (count === 1) return frames[0];
+  const targetSteps = Math.max(2, Math.round(motion.auroraDuration * motion.auroraFps));
+  const count = effects.animatedAurora && motion.enabled ? Math.floor(targetSteps / 2) + 1 : 1;
+  const phaseSpan = 16.8;
+  const frames = Array.from({ length: count }, (_, index) => auroraFrame(count === 1 ? 0 : index * phaseSpan / (count - 1), width, height));
+  const image = (frame, extra = '') => `<image x="0" y="0" width="${width}" height="${height}" preserveAspectRatio="none" href="data:image/png;base64,${frame.data}" ${extra}/>`;
+  if (count === 1) return image(frames[0]);
   const order = [...Array(count).keys(), ...Array.from({ length: count - 2 }, (_, i) => count - 2 - i)];
-  const keyTimes = order.map((_, i) => (i / (order.length - 1)).toFixed(4)).join(';');
+  const keyTimes = order.map((_, i) => (i / (order.length - 1)).toFixed(5)).join(';');
   return frames.map((frame, index) => {
     const values = order.map((active) => active === index ? 1 : 0).join(';');
-    return `<g opacity="${index === 0 ? 1 : 0}" class="motion">${frame}<animate attributeName="opacity" values="${values}" keyTimes="${keyTimes}" dur="${seconds(motion.auroraDuration)}" calcMode="discrete" repeatCount="indefinite"/></g>`;
-  }).join('') + `<g class="reduced" style="display:none">${frames[0]}</g>`;
+    return image(frame, `opacity="${index === 0 ? 1 : 0}" class="motion"`) .replace('/>', `><animate attributeName="opacity" values="${values}" keyTimes="${keyTimes}" dur="${seconds(motion.auroraDuration)}" calcMode="discrete" repeatCount="indefinite"/></image>`);
+  }).join('') + image(frames[0], 'class="reduced" style="display:none"');
 }
 
 function headerSvg() {

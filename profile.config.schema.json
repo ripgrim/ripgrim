@@ -47,12 +47,12 @@
     },
     "motion": {
       "type": "object",
-      "required": ["enabled", "speed", "auroraDuration", "auroraFrames", "pendingDuration"],
+      "required": ["enabled", "speed", "auroraDuration", "auroraFps", "pendingDuration"],
       "properties": {
         "enabled": { "type": "boolean" },
         "speed": { "type": "number", "exclusiveMinimum": 0 },
         "auroraDuration": { "type": "number", "exclusiveMinimum": 0 },
-        "auroraFrames": { "type": "integer", "minimum": 2, "maximum": 16 },
+        "auroraFps": { "type": "integer", "minimum": 1, "maximum": 60 },
         "pendingDuration": { "type": "number", "exclusiveMinimum": 0 }
       }
     },

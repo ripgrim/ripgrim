@@ -2,7 +2,7 @@
   "$schema": "./profile.config.schema.json",
   "github": {
     "username": "ripgrim",
-    "featuredRepos": ["fx", "anon-kode", "spotless", "canvas"],
+    "featuredRepos": ["fx", "anon-kode", "spotless", "Boring-Software-Inc/dither-kit"],
     "moreRepos": ["lab", "ripgrim-com", "better-env", "disrecord"]
   },
   "profile": {
@@ -40,7 +40,7 @@
     "enabled": true,
     "speed": 1,
     "auroraDuration": 9,
-    "auroraFrames": 8,
+    "auroraFps": 30,
     "pendingDuration": 0.8
   },
   "effects": {
