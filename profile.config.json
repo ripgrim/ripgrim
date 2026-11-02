@@ -2,8 +2,8 @@
   "$schema": "./profile.config.schema.json",
   "github": {
     "username": "ripgrim",
-    "featuredRepos": ["Boring-Software-Inc/dither-kit"],
-    "moreRepos": ["lab", "ripgrim-com", "better-env", "disrecord"]
+    "featuredRepos": ["Boring-Software-Inc/dither-kit", "boring-software-inc/v2"], 
+    "moreRepos": ["lab", "ripgrim-com"]
   },
   "profile": {
     "name": "grim",
