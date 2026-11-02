@@ -5,7 +5,7 @@
     "featuredRepos": [
       {
         "repo": "Boring-Software-Inc/dither-kit",
-        "solidButton": false,
+        "solidButton": true,
         "linkLabel": "Visit project",
         "projectUrl": "https://tripwire.sh/dither-kit",
         "showBanner": true,
@@ -15,7 +15,7 @@
       },
       {
         "repo": "Boring-Software-Inc/v2",
-        "solidButton": false,
+        "solidButton": true,
         "linkLabel": "View source",
         "projectUrl": "",
         "showBanner": true,
