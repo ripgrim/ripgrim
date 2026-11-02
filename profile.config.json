@@ -53,13 +53,13 @@
   },
   "theme": {
     "page": "#202020",
-    "panel": "#262626",
-    "well": "#2b2b2b",
+    "panel": "#303030",
+    "well": "#383838",
     "text1": "#f2f2f2",
     "text2": "#c7c7c7",
     "text3": "#999999",
-    "line": "#3a3a3a",
-    "lineFaint": "#2d2d2d",
+    "line": "#4a4a4a",
+    "lineFaint": "#343434",
     "accent": "#ffd400",
     "accentText": "#ffd400",
     "selected": "#3a3107",
@@ -67,7 +67,7 @@
     "warn": "#b0b0b0",
     "fail": "#e0e0e0",
     "languageFallback": "#999999",
-    "auroraPalette": ["#202020", "#303030", "#6b5a00", "#ffd400", "#f2f2f2"]
+    "auroraPalette": ["#202020", "#383838", "#666666", "#ffd400", "#f2f2f2"]
   },
   "motion": {
     "enabled": true,

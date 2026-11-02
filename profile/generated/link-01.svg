@@ -5,4 +5,4 @@
     .body{font-size:14px}.code{font-size:13px}.code-sm{font-size:12px}.label{font-size:12px;letter-spacing:.06em;text-transform:uppercase}.micro{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
     .title{font-size:24px;letter-spacing:-.025em}.display{font-size:56px;letter-spacing:-.04em}
     @media(prefers-reduced-motion:reduce){.motion{display:none!important}.reduced{display:block!important}}
-  </style><rect width="220" height="68" fill="#202020"/><text x="12" y="41" class="label t1">github ↗</text><rect x=".5" y=".5" width="219" height="67" fill="none" stroke="#3a3a3a"/></svg>
+  </style><rect width="220" height="68" fill="#202020"/><text x="12" y="41" class="label t1">github ↗</text><rect x=".5" y=".5" width="219" height="67" fill="none" stroke="#4a4a4a"/></svg>
