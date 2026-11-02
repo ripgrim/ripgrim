@@ -14,8 +14,16 @@ if (!Array.isArray(config.github.featuredRepos) || !config.github.featuredRepos.
 const featuredKeys = config.github.featuredRepos.map((entry) => typeof entry === 'string' ? entry : entry?.repo);
 if (featuredKeys.some((key) => !key)) throw new Error('Every github.featuredRepos entry needs a repo');
 if (new Set(featuredKeys).size !== featuredKeys.length) throw new Error('github.featuredRepos contains duplicates');
+for (const entry of config.github.featuredRepos.filter((item) => typeof item === 'object')) {
+  if (typeof entry.solidButton !== 'boolean' || typeof entry.showBanner !== 'boolean' || typeof entry.autoOgImage !== 'boolean') throw new Error(`Featured repo ${entry.repo} is missing a boolean option`);
+  if (!entry.linkLabel) throw new Error(`Featured repo ${entry.repo} needs linkLabel`);
+  for (const field of ['projectUrl', 'ogSourceUrl', 'bannerUrl']) {
+    if (entry[field] && !URL.canParse(entry[field])) throw new Error(`Featured repo ${entry.repo} has an invalid ${field}`);
+  }
+}
 if (!config.projects || typeof config.projects.bannersEnabled !== 'boolean' || typeof config.projects.autoOgImages !== 'boolean') throw new Error('projects banner booleans are required');
-if ((config.projects.bannerHeight || 0) < 112 || config.projects.bannerHeight > 260) throw new Error('projects.bannerHeight must be between 112 and 260');
+if ((config.projects.bannerHeight || 0) < 112 || config.projects.bannerHeight > 320) throw new Error('projects.bannerHeight must be between 112 and 320');
+if (!['contain', 'cover'].includes(config.projects.bannerFit)) throw new Error('projects.bannerFit must be contain or cover');
 if ((config.motion?.speed || 0) <= 0) throw new Error('motion.speed must be greater than zero');
 if ((config.motion?.auroraFps || 0) < 1 || config.motion.auroraFps > 60) throw new Error('motion.auroraFps must be between 1 and 60');
 if (![1, 2].includes(config.layout?.projectColumns)) throw new Error('layout.projectColumns must be 1 or 2');

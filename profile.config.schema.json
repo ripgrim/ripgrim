@@ -17,12 +17,15 @@
               { "type": "string" },
               {
                 "type": "object",
-                "required": ["repo", "solidButton", "showBanner", "autoOgImage", "bannerUrl"],
+                "required": ["repo", "solidButton", "linkLabel", "projectUrl", "showBanner", "autoOgImage", "ogSourceUrl", "bannerUrl"],
                 "properties": {
                   "repo": { "type": "string", "minLength": 1 },
                   "solidButton": { "type": "boolean" },
+                  "linkLabel": { "type": "string", "minLength": 1 },
+                  "projectUrl": { "type": "string" },
                   "showBanner": { "type": "boolean" },
                   "autoOgImage": { "type": "boolean" },
+                  "ogSourceUrl": { "type": "string" },
                   "bannerUrl": { "type": "string" }
                 }
               }
@@ -34,11 +37,12 @@
     },
     "projects": {
       "type": "object",
-      "required": ["bannersEnabled", "autoOgImages", "bannerHeight"],
+      "required": ["bannersEnabled", "autoOgImages", "bannerHeight", "bannerFit"],
       "properties": {
         "bannersEnabled": { "type": "boolean" },
         "autoOgImages": { "type": "boolean" },
-        "bannerHeight": { "type": "integer", "minimum": 112, "maximum": 260 }
+        "bannerHeight": { "type": "integer", "minimum": 112, "maximum": 320 },
+        "bannerFit": { "enum": ["contain", "cover"] }
       }
     },
     "profile": {

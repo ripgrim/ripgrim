@@ -4,7 +4,7 @@ The README and SVG panels are generated from [`profile.config.json`](./profile.c
 
 ## Change what appears
 
-- `github.featuredRepos`: highlighted project cards, in order. Each entry can set `solidButton`, `showBanner`, `autoOgImage`, and `bannerUrl`.
+- `github.featuredRepos`: highlighted project cards, in order. Each entry independently controls its destination, action label/style, OG source page, and banner.
 - `github.moreRepos`: compact repository list.
 - `projects`: global banner enablement, automatic GitHub Open Graph image lookup, and banner height.
 - `profile`: name, intro, status, focus, state, and the complete bottom `links` strip. Add, remove, reorder, relabel, or retarget links directly in the config (up to six).
@@ -21,13 +21,18 @@ A featured repository may be a plain string or an object:
 {
   "repo": "Boring-Software-Inc/dither-kit",
   "solidButton": false,
+  "linkLabel": "Visit project",
+  "projectUrl": "https://tripwire.sh/dither-kit",
   "showBanner": true,
   "autoOgImage": true,
+  "ogSourceUrl": "https://tripwire.sh/dither-kit",
   "bannerUrl": ""
 }
 ```
 
-`bannerUrl` overrides automatic discovery when non-empty. A banner renders only when both the global `projects.bannersEnabled` switch and the entry's `showBanner` switch are enabled. Automatic GitHub Open Graph lookup additionally requires both `projects.autoOgImages` and `autoOgImage`.
+`projectUrl` is only the destination when someone clicks the featured card. `ogSourceUrl` is only the webpage inspected for its `og:image`, so a project can link to one URL while sourcing its banner from another. Leave either empty to fall back to the repository URL. `bannerUrl` is a direct image override and skips OG discovery.
+
+A banner renders only when both the global `projects.bannersEnabled` switch and the entry's `showBanner` switch are enabled. Automatic OG lookup additionally requires both `projects.autoOgImages` and `autoOgImage`. Set global `projects.bannerFit` to `contain` to show the complete image or `cover` to crop it edge-to-edge. `bannerHeight` controls the available image area.
 
 ## Preview locally
 

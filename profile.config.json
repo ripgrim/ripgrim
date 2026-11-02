@@ -6,15 +6,21 @@
       {
         "repo": "Boring-Software-Inc/dither-kit",
         "solidButton": false,
+        "linkLabel": "Visit project",
+        "projectUrl": "https://tripwire.sh/dither-kit",
         "showBanner": true,
         "autoOgImage": true,
+        "ogSourceUrl": "https://tripwire.sh/dither-kit",
         "bannerUrl": ""
       },
       {
         "repo": "Boring-Software-Inc/v2",
         "solidButton": false,
+        "linkLabel": "View source",
+        "projectUrl": "",
         "showBanner": true,
         "autoOgImage": true,
+        "ogSourceUrl": "",
         "bannerUrl": ""
       }
     ],
@@ -23,7 +29,8 @@
   "projects": {
     "bannersEnabled": true,
     "autoOgImages": true,
-    "bannerHeight": 132
+    "bannerHeight": 220,
+    "bannerFit": "contain"
   },
   "profile": {
     "name": "grim",
