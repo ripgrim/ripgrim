@@ -6,17 +6,6 @@
     "following": 96
   },
   "repos": {
-    "fx": {
-      "name": "fx",
-      "full_name": "ripgrim/fx",
-      "html_url": "https://github.com/ripgrim/fx",
-      "description": "Unix like coding agent",
-      "language": "Zig",
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "updated_at": "2026-09-08T17:24:53Z",
-      "topics": []
-    },
     "anon-kode": {
       "name": "anon-kode",
       "full_name": "ripgrim/anon-kode",
@@ -28,26 +17,15 @@
       "updated_at": "2026-10-25T18:48:14Z",
       "topics": []
     },
-    "canvas": {
-      "name": "canvas",
-      "full_name": "ripgrim/canvas",
-      "html_url": "https://github.com/ripgrim/canvas",
-      "description": "React and DOM design canvas with repository-backed editing",
+    "spotless": {
+      "name": "spotless",
+      "full_name": "ripgrim/spotless",
+      "html_url": "https://github.com/ripgrim/spotless",
+      "description": "keep your downloads folder spotless",
       "language": "TypeScript",
-      "stargazers_count": 1,
-      "forks_count": 0,
-      "updated_at": "2026-10-14T22:28:43Z",
-      "topics": []
-    },
-    "lab": {
-      "name": "lab",
-      "full_name": "ripgrim/lab",
-      "html_url": "https://github.com/ripgrim/lab",
-      "description": "thank u justin",
-      "language": "TypeScript",
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "updated_at": "2026-11-02T00:09:14Z",
+      "stargazers_count": 11,
+      "forks_count": 1,
+      "updated_at": "2026-10-03T06:01:20Z",
       "topics": []
     },
     "better-env": {
@@ -72,6 +50,17 @@
       "updated_at": "2026-08-21T20:19:19Z",
       "topics": []
     },
+    "canvas": {
+      "name": "canvas",
+      "full_name": "ripgrim/canvas",
+      "html_url": "https://github.com/ripgrim/canvas",
+      "description": "React and DOM design canvas with repository-backed editing",
+      "language": "TypeScript",
+      "stargazers_count": 1,
+      "forks_count": 0,
+      "updated_at": "2026-10-14T22:28:43Z",
+      "topics": []
+    },
     "disrecord": {
       "name": "disrecord",
       "full_name": "ripgrim/disrecord",
@@ -83,15 +72,26 @@
       "updated_at": "2026-07-28T00:21:52Z",
       "topics": []
     },
-    "spotless": {
-      "name": "spotless",
-      "full_name": "ripgrim/spotless",
-      "html_url": "https://github.com/ripgrim/spotless",
-      "description": "keep your downloads folder spotless",
+    "fx": {
+      "name": "fx",
+      "full_name": "ripgrim/fx",
+      "html_url": "https://github.com/ripgrim/fx",
+      "description": "Unix like coding agent",
+      "language": "Zig",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "updated_at": "2026-09-08T17:24:53Z",
+      "topics": []
+    },
+    "lab": {
+      "name": "lab",
+      "full_name": "ripgrim/lab",
+      "html_url": "https://github.com/ripgrim/lab",
+      "description": "thank u justin",
       "language": "TypeScript",
-      "stargazers_count": 11,
-      "forks_count": 1,
-      "updated_at": "2026-10-03T06:01:20Z",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "updated_at": "2026-11-02T00:09:14Z",
       "topics": []
     }
   }
