@@ -16,7 +16,7 @@ if (featuredKeys.some((key) => !key)) throw new Error('Every github.featuredRepo
 if (new Set(featuredKeys).size !== featuredKeys.length) throw new Error('github.featuredRepos contains duplicates');
 for (const entry of config.github.featuredRepos.filter((item) => typeof item === 'object')) {
   if (typeof entry.solidButton !== 'boolean' || typeof entry.showBanner !== 'boolean' || typeof entry.autoOgImage !== 'boolean') throw new Error(`Featured repo ${entry.repo} is missing a boolean option`);
-  if (!entry.linkLabel) throw new Error(`Featured repo ${entry.repo} needs linkLabel`);
+  if (entry.ctaLabel !== null && (typeof entry.ctaLabel !== 'string' || !entry.ctaLabel.trim())) throw new Error(`Featured repo ${entry.repo} ctaLabel must be text or null`);
   for (const field of ['projectUrl', 'ogSourceUrl', 'bannerUrl']) {
     if (entry[field] && !URL.canParse(entry[field])) throw new Error(`Featured repo ${entry.repo} has an invalid ${field}`);
   }

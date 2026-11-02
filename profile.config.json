@@ -6,7 +6,7 @@
       {
         "repo": "Boring-Software-Inc/dither-kit",
         "solidButton": true,
-        "linkLabel": "Visit project",
+        "ctaLabel": "Visit project",
         "projectUrl": "https://tripwire.sh/dither-kit",
         "showBanner": true,
         "autoOgImage": true,
@@ -16,7 +16,7 @@
       {
         "repo": "Boring-Software-Inc/v2",
         "solidButton": true,
-        "linkLabel": "View source",
+        "ctaLabel": "View source",
         "projectUrl": "",
         "showBanner": true,
         "autoOgImage": true,

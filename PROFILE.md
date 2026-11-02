@@ -21,7 +21,7 @@ A featured repository may be a plain string or an object:
 {
   "repo": "Boring-Software-Inc/dither-kit",
   "solidButton": false,
-  "linkLabel": "Visit project",
+  "ctaLabel": "Visit project",
   "projectUrl": "https://tripwire.sh/dither-kit",
   "showBanner": true,
   "autoOgImage": true,
@@ -30,7 +30,7 @@ A featured repository may be a plain string or an object:
 }
 ```
 
-`projectUrl` is only the destination when someone clicks the featured card. `ogSourceUrl` is only the webpage inspected for its `og:image`, so a project can link to one URL while sourcing its banner from another. Leave either empty to fall back to the repository URL. `bannerUrl` is a direct image override and skips OG discovery.
+`projectUrl` is only the destination when someone clicks the featured card. `ctaLabel` controls the visible action text, such as `View source` or `Visit project`; set it to `null` to omit the CTA entirely while keeping the whole card clickable. `ogSourceUrl` is only the webpage inspected for its `og:image`, so a project can link to one URL while sourcing its banner from another. Leave either URL empty to fall back to the repository URL. `bannerUrl` is a direct image override and skips OG discovery.
 
 A banner renders only when both the global `projects.bannersEnabled` switch and the entry's `showBanner` switch are enabled. Automatic OG lookup additionally requires both `projects.autoOgImages` and `autoOgImage`. Set global `projects.bannerFit` to `contain` to show the complete image or `cover` to crop it edge-to-edge. `bannerHeight` controls the available image area.
 
