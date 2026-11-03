@@ -3,6 +3,31 @@
   "title": "Animated GitHub profile configuration",
   "type": "object",
   "required": ["github", "projects", "profile", "theme", "motion", "effects", "layout"],
+  "$defs": {
+    "palette": {
+      "type": "object",
+      "required": ["page", "panel", "well", "text1", "text2", "text3", "line", "lineFaint", "accent", "accentText", "selected", "ok", "warn", "fail", "languageFallback", "auroraPalette"],
+      "properties": {
+        "page": { "type": "string" },
+        "panel": { "type": "string" },
+        "well": { "type": "string" },
+        "text1": { "type": "string" },
+        "text2": { "type": "string" },
+        "text3": { "type": "string" },
+        "line": { "type": "string" },
+        "lineFaint": { "type": "string" },
+        "accent": { "type": "string" },
+        "accentText": { "type": "string" },
+        "selected": { "type": "string" },
+        "ok": { "type": "string" },
+        "warn": { "type": "string" },
+        "fail": { "type": "string" },
+        "languageFallback": { "type": "string" },
+        "auroraPalette": { "type": "array", "minItems": 2, "maxItems": 8, "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  },
   "properties": {
     "github": {
       "type": "object",
@@ -75,11 +100,12 @@
     },
     "theme": {
       "type": "object",
-      "required": ["page", "panel", "well", "text1", "text2", "text3", "line", "lineFaint", "accent", "selected", "ok", "warn", "fail", "languageFallback", "auroraPalette"],
+      "required": ["dark", "light"],
       "properties": {
-        "auroraPalette": { "type": "array", "minItems": 2, "maxItems": 8, "items": { "type": "string" } }
+        "dark": { "$ref": "#/$defs/palette" },
+        "light": { "$ref": "#/$defs/palette" }
       },
-      "additionalProperties": { "type": ["string", "array"] }
+      "additionalProperties": false
     },
     "motion": {
       "type": "object",

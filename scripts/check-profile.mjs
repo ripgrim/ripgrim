@@ -4,10 +4,13 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = JSON.parse(await readFile(path.join(root, 'profile.config.json'), 'utf8'));
-const requiredColors = ['page', 'panel', 'well', 'text1', 'text2', 'text3', 'line', 'lineFaint', 'accent', 'selected', 'ok', 'warn', 'fail', 'languageFallback'];
-const missing = requiredColors.filter((key) => !config.theme?.[key]);
-if (missing.length) throw new Error(`Missing theme colors: ${missing.join(', ')}`);
-if (!Array.isArray(config.theme?.auroraPalette) || config.theme.auroraPalette.length < 2) throw new Error('theme.auroraPalette needs at least two colors');
+const requiredColors = ['page', 'panel', 'well', 'text1', 'text2', 'text3', 'line', 'lineFaint', 'accent', 'accentText', 'selected', 'ok', 'warn', 'fail', 'languageFallback'];
+for (const mode of ['dark', 'light']) {
+  const palette = config.theme?.[mode];
+  const missing = requiredColors.filter((key) => !palette?.[key]);
+  if (missing.length) throw new Error(`Missing ${mode} theme colors: ${missing.join(', ')}`);
+  if (!Array.isArray(palette?.auroraPalette) || palette.auroraPalette.length < 2) throw new Error(`theme.${mode}.auroraPalette needs at least two colors`);
+}
 if (!config.github?.username) throw new Error('github.username is required');
 if (!Array.isArray(config.profile?.links) || config.profile.links.length < 1 || config.profile.links.length > 6) throw new Error('profile.links must contain between one and six links');
 if (!Array.isArray(config.github.featuredRepos) || !config.github.featuredRepos.length) throw new Error('Choose at least one github.featuredRepos entry');
