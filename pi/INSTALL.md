@@ -1,12 +1,20 @@
 # Pi install commands
 
-The preferred complete install is:
+Install the personal extension and skill suite directly from GitHub:
+
+```bash
+pi install git:github.com/ripgrim/ripgrim
+```
+
+Pi installs Git repositories at their package root; use `pi config` to select individual resources from the suite.
+
+For the complete machine bootstrap—including external packages and sanitized preferences—use:
 
 ```bash
 ./pi/install.sh
 ```
 
-The equivalent package commands are listed below for selective/manual setup.
+The equivalent package commands are listed below for local development and selective/manual setup.
 
 ## Third-party packages
 
@@ -26,9 +34,9 @@ pi install git:github.com/zerray/pi-remote-control@ad1f5ba0a563974ba4cbf897fe989
 
 After installing `pi-subagents`, configure that package with `extensions: []` in `~/.pi/agent/settings.json` when using `@ripgrim/pi-subagents-ui`. The complete installer does this automatically.
 
-## Personal extension packages
+## Personal extension packages — local development
 
-Run these from the repository root:
+These subdirectory commands require a local clone. Remote Git installs use the repository-root command shown above. Run these from the repository root:
 
 ```bash
 pi install ./pi/extensions/atelier
@@ -44,7 +52,9 @@ pi install ./pi/extensions/token-throughput
 pi install ./pi/extensions/welcome-screen
 ```
 
-## Curated skills
+## Curated skills — local development
+
+The root Git package already exposes the curated skills. From a local clone, the skills-only package can be loaded with:
 
 ```bash
 pi install ./pi/skills

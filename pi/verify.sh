@@ -11,10 +11,17 @@ for package in (root / "extensions").iterdir():
     if not package.is_dir(): continue
     manifest = json.load(open(package / "package.json"))
     assert manifest["name"].startswith("@ripgrim/pi-")
-    assert (package / "README.md").is_file()
+    readme = package / "README.md"
+    screenshot = package / "assets" / "screenshot.png"
+    assert readme.is_file()
+    assert screenshot.is_file() and screenshot.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    assert "./assets/screenshot.png" in readme.read_text()
     for entry in manifest["pi"]["extensions"]:
         assert (package / entry).is_file(), (package, entry)
-print("manifests: ok")
+root_manifest = json.load(open(root.parent / "package.json"))
+for entry in root_manifest["pi"]["extensions"] + root_manifest["pi"]["skills"]:
+    assert (root.parent / entry).exists(), entry
+print("manifests and README attachments: ok")
 PY
 
 for test in "$PI_ROOT"/extensions/*/*.test.ts; do
@@ -28,6 +35,9 @@ done
 pi --no-extensions --no-skills --no-prompt-templates --no-themes \
   "${extension_args[@]}" --list-models >/dev/null
 printf 'extension load smoke test: ok\n'
+pi --no-extensions --no-skills --no-prompt-templates --no-themes \
+  --extension "$PI_ROOT/.." --list-models >/dev/null
+printf 'repository-root Git package smoke test: ok\n'
 
 python3 - "$PI_ROOT" <<'PY'
 import pathlib, re, sys

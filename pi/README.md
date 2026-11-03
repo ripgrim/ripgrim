@@ -24,7 +24,17 @@ pi/
 └── verify.sh              # manifests, tests, and secret scan
 ```
 
-## Install the complete setup
+## Install from GitHub
+
+Install the personal extension and skill suite directly from the repository root:
+
+```bash
+pi install git:github.com/ripgrim/ripgrim
+```
+
+This tracks `main`, like other Git-backed Pi packages. Run `pi config` afterward to enable or disable individual extensions or skills.
+
+For the complete machine setup—including pinned third-party packages and sanitized UI preferences—clone the repository and run the bootstrap script:
 
 ```bash
 git clone git@github.com:ripgrim/ripgrim.git ~/code/ripgrim
@@ -43,16 +53,22 @@ The installer:
 
 Run `/reload` in Pi afterward.
 
-## Install one extension
+## Individual extensions
 
-Every extension has its own package manifest, README, credit, and command:
+Every extension keeps its own package manifest, README, tests, and credit. Pi’s Git source installs repositories rather than repository subdirectories, so the public GitHub command installs the root suite package:
+
+```bash
+pi install git:github.com/ripgrim/ripgrim
+```
+
+Use `pi config` to select individual resources. Direct subdirectory installs are retained for local development:
 
 ```bash
 pi install ~/code/ripgrim/pi/extensions/attachment-ux
 pi install ~/code/ripgrim/pi/extensions/pierre-diff
 ```
 
-See each package’s `README.md` for its exact command and provenance, or use the complete copyable list in [`INSTALL.md`](./INSTALL.md).
+See each package’s `README.md` for provenance, or use the complete copyable list in [`INSTALL.md`](./INSTALL.md).
 
 ## Curated skills
 
@@ -67,9 +83,13 @@ The globally loaded set is intentionally small:
 
 Install it with:
 
+The GitHub suite command installs these skills automatically:
+
 ```bash
-pi install ~/code/ripgrim/pi/skills
+pi install git:github.com/ripgrim/ripgrim
 ```
+
+For local development, install the skill package directly with `pi install ~/code/ripgrim/pi/skills`.
 
 The broader repository `.skills/` collection remains available for project-specific use but is not globally loaded by this setup.
 

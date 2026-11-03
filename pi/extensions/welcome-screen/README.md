@@ -4,9 +4,19 @@
 
 Shows a responsive startup card with model, shortcuts, and recent sessions.
 
+![Pi welcome screen showing model details, shortcuts, and recent sessions](./assets/screenshot.png)
+
 ## Install
 
-From a clone of [`ripgrim/ripgrim`](https://github.com/ripgrim/ripgrim):
+Install the public package directly from GitHub:
+
+```bash
+pi install git:github.com/ripgrim/ripgrim
+```
+
+The repository root is the distributable Pi package and exposes every extension in this suite. Use `pi config` to enable or disable individual resources.
+
+For local development from a clone, this package can also be loaded directly:
 
 ```bash
 pi install ./pi/extensions/welcome-screen

@@ -4,6 +4,14 @@ Curated global Pi skills for ripgrim’s setup.
 
 ## Install
 
+Install the public suite directly from GitHub:
+
+```bash
+pi install git:github.com/ripgrim/ripgrim
+```
+
+The repository-root package exposes this curated skill set. For skills-only local development from a clone:
+
 ```bash
 pi install ./pi/skills
 ```

@@ -16,5 +16,33 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ripgrim/ripgrim.git"
+  },
+  "keywords": [
+    "pi-package",
+    "dotfiles",
+    "pi"
+  ],
+  "pi": {
+    "extensions": [
+      "./pi/extensions/atelier/src/index.ts",
+      "./pi/extensions/attachment-ux/src/index.ts",
+      "./pi/extensions/footer-context/src/index.ts",
+      "./pi/extensions/image-budget/src/index.ts",
+      "./pi/extensions/keybinding-manager/src/index.ts",
+      "./pi/extensions/pierre-diff/src/index.ts",
+      "./pi/extensions/resource-importer/src/index.ts",
+      "./pi/extensions/subagent-panel/src/index.ts",
+      "./pi/extensions/subagents-ui/src/index.ts",
+      "./pi/extensions/token-throughput/src/index.ts",
+      "./pi/extensions/welcome-screen/src/index.ts"
+    ],
+    "skills": [
+      "./pi/skills/break-it",
+      "./pi/skills/pierre-diff",
+      "./pi/skills/show-me",
+      "./pi/skills/state-machine",
+      "./pi/skills/understand-pr",
+      "./pi/skills/variant"
+    ]
   }
 }
