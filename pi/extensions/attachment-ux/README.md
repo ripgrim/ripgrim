@@ -2,7 +2,7 @@
 
 ## Attachment UX
 
-Immediate clipboard feedback, atomic pasted-image chips, and clickable file paths.
+Immediate clipboard feedback, atomic pasted-image chips, and clear file actions. `edit` paths are inert text with explicit `[diff]` and `[reveal]` buttons: click `[diff]` to open that tool call's exact Pierre diff, or `[reveal]` to open its containing folder. Long paths truncate while both actions remain on the same stable line; read/write path behavior is unchanged.
 
 ![Pi editor showing an atomic Pasted image chip created by Attachment UX](./assets/screenshot.png)
 

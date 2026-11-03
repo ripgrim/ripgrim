@@ -86,6 +86,20 @@ test("incrementally tails complete JSONL records without losing partial or malfo
 	}
 });
 
+test("JSONL lookbehind owns bounded storage instead of retaining the read chunk", () => {
+	const root = mkdtempSync(join(tmpdir(), "pi-jsonl-lookbehind-"));
+	const path = join(root, "events.jsonl");
+	try {
+		writeFileSync(path, `${"x".repeat(256 * 1024)}\n`);
+		const state = createJsonlTailState();
+		readJsonlTail(path, state, { chunkBytes: 256 * 1024, maxLineBytes: 512 * 1024, lookbehindBytes: 64 });
+		assert.equal(state.lookbehind.length, 64);
+		assert.equal(state.lookbehind.buffer.byteLength, 64);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
 test("JSONL tail detects same-inode truncate-and-regrow past a partial cursor", () => {
 	const root = mkdtempSync(join(tmpdir(), "pi-jsonl-regrow-"));
 	const path = join(root, "events.jsonl");

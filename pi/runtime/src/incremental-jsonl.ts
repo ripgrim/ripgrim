@@ -35,6 +35,15 @@ function resetState(state: JsonlTailState, identity: string): void {
 	state.fileIdentity = identity;
 }
 
+function retainLookbehind(previous: Buffer, chunk: Buffer, limit: number): Buffer {
+	const chunkLength = Math.min(chunk.length, limit);
+	const previousLength = Math.min(previous.length, limit - chunkLength);
+	const retained = Buffer.allocUnsafeSlow(previousLength + chunkLength);
+	if (previousLength) previous.copy(retained, 0, previous.length - previousLength);
+	if (chunkLength) chunk.copy(retained, previousLength, chunk.length - chunkLength);
+	return retained;
+}
+
 /**
  * Incrementally reads newline-terminated JSON records. The byte cursor advances
  * over bytes already retained in carry, so a partial final record is completed
@@ -86,7 +95,7 @@ export function readJsonlTail<T = Record<string, unknown>>(
 			state.offset += read;
 			bytesRead += read;
 			const readBytes = chunk.subarray(0, read);
-			state.lookbehind = Buffer.concat([state.lookbehind, readBytes]).subarray(-lookbehindBytes);
+			state.lookbehind = retainLookbehind(state.lookbehind, readBytes, lookbehindBytes);
 			let data = readBytes;
 
 			if (state.discardingLine) {

@@ -2,7 +2,7 @@
 
 ## Subagent Panel
 
-Terminal-independent in-Pi inspector for active and retained subagent runs.
+Terminal-independent in-Pi inspector for active and retained subagent runs. Mirrored child `edit` headers use the same explicit `[diff]` and `[reveal]` actions as the main chat.
 
 ![Behavior diagram of the Subagent Panel fleet list and child transcript drawer](./assets/screenshot.png)
 

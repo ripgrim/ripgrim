@@ -2,6 +2,7 @@ import { appendFileSync } from "node:fs";
 import { isAbsolute, relative, resolve } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { readTextFile } from "../../../runtime/src/pierre-diff-core.ts";
+import { toolResultPatch } from "../../../runtime/src/tool-diff-snapshots.ts";
 
 /**
  * Headless child-side change journal.
@@ -24,21 +25,36 @@ export default function subagentChangeJournal(pi: ExtensionAPI): void {
 		const absolutePath = isAbsolute(requested) ? requested : resolve(ctx.cwd, requested);
 		const displayPath = relative(ctx.cwd, absolutePath) || requested;
 		pending.set(event.toolCallId, { absolutePath, displayPath, cwd: ctx.cwd });
-		if (seen.has(absolutePath)) return;
-		seen.add(absolutePath);
-		const record = {
+		const before = readTextFile(absolutePath);
+		const records = [{
 			v: 1,
-			type: "snapshot",
+			type: "tool_snapshot",
+			toolCallId: event.toolCallId,
 			ts: Date.now(),
 			actor,
 			runId,
 			cwd: ctx.cwd,
 			path: absolutePath,
 			displayPath,
-			before: readTextFile(absolutePath),
-		};
+			before,
+		}];
+		if (!seen.has(absolutePath)) {
+			seen.add(absolutePath);
+			records.push({
+				v: 1,
+				type: "snapshot",
+				toolCallId: event.toolCallId,
+				ts: Date.now(),
+				actor,
+				runId,
+				cwd: ctx.cwd,
+				path: absolutePath,
+				displayPath,
+				before,
+			});
+		}
 		try {
-			appendFileSync(logPath, `${JSON.stringify(record)}\n`, { encoding: "utf8", mode: 0o600 });
+			appendFileSync(logPath, records.map((record) => JSON.stringify(record)).join("\n") + "\n", { encoding: "utf8", mode: 0o600 });
 		} catch {
 			// Change tracking must never fail a child tool call.
 		}
@@ -48,19 +64,40 @@ export default function subagentChangeJournal(pi: ExtensionAPI): void {
 		const target = pending.get(event.toolCallId);
 		if (!target) return;
 		pending.delete(event.toolCallId);
-		if (event.isError) return;
+		const after = event.isError ? null : readTextFile(target.absolutePath);
+		const patch = event.toolName === "edit" ? toolResultPatch(event.result) : undefined;
+		const records = [{
+			v: 1,
+			type: "tool_after",
+			toolCallId: event.toolCallId,
+			ts: Date.now(),
+			actor,
+			runId,
+			cwd: target.cwd,
+			path: target.absolutePath,
+			displayPath: target.displayPath,
+			after,
+			patch,
+			failed: event.isError,
+			unavailable: !event.isError && event.toolName === "edit" && patch === undefined,
+		}];
+		if (!event.isError) records.push({
+			v: 1,
+			type: "after",
+			toolCallId: event.toolCallId,
+			ts: Date.now(),
+			actor,
+			runId,
+			cwd: target.cwd,
+			path: target.absolutePath,
+			displayPath: target.displayPath,
+			after,
+			patch,
+			failed: false,
+			unavailable: false,
+		});
 		try {
-			appendFileSync(logPath, `${JSON.stringify({
-				v: 1,
-				type: "after",
-				ts: Date.now(),
-				actor,
-				runId,
-				cwd: target.cwd,
-				path: target.absolutePath,
-				displayPath: target.displayPath,
-				after: readTextFile(target.absolutePath),
-			})}\n`, { encoding: "utf8", mode: 0o600 });
+			appendFileSync(logPath, records.map((record) => JSON.stringify(record)).join("\n") + "\n", { encoding: "utf8", mode: 0o600 });
 		} catch {
 			// Best effort only.
 		}

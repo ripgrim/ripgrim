@@ -5,9 +5,6 @@ import {
 	type Theme,
 } from "@earendil-works/pi-coding-agent";
 import {
-	getCapabilities,
-	hyperlink,
-	MouseRegion,
 	Text,
 	truncateToWidth,
 	type KeybindingsManager,
@@ -19,6 +16,8 @@ import {
 	detectDesktopPlatform,
 	isClipboardImagePath,
 } from "./core.ts";
+import { emitPierreDiffRequest } from "../../../runtime/src/pierre-diff-request.ts";
+import { createToolPathHeader } from "../../../runtime/src/tool-path-header.ts";
 
 const FEEDBACK_WIDGET_ID = "grim-attachment-paste";
 const PASTE_TIMEOUT_MS = 10_000;
@@ -217,25 +216,21 @@ export default function attachmentUx(pi: ExtensionAPI): void {
 
 				const absolutePath = absoluteToolPath(rawPath, context.cwd);
 				const platform = detectDesktopPlatform();
-				const fileUrl = desktopFileUrl(platform, absolutePath, false);
-				const revealUrl = desktopFileUrl(platform, absolutePath, true);
-				const linkedPath = getCapabilities().hyperlinks
-					? hyperlink(theme.underline(theme.fg("accent", rawPath)), fileUrl)
-					: theme.underline(theme.fg("accent", rawPath));
-				const revealLink = getCapabilities().hyperlinks
-					? hyperlink(theme.fg("muted", "[reveal]"), revealUrl)
-					: theme.fg("muted", "[reveal]");
-				const child = new Text(
-					`${theme.fg("toolTitle", theme.bold(`${toolName} `))}${linkedPath}  ${revealLink}`,
-					0,
-					0,
-				);
-
-				return new MouseRegion(child, (event) => {
-					if (event.type !== "click" || event.button !== "left") return;
-					if (!event.ctrl && !event.shift) return;
-					void openPath(rawPath, event.shift, context.cwd);
-					return { handled: true, render: false };
+				return createToolPathHeader({
+					toolName,
+					rawPath,
+					theme,
+					fileUrl: desktopFileUrl(platform, absolutePath, false),
+					revealUrl: desktopFileUrl(platform, absolutePath, true),
+					onOpen: (path, reveal) => { void openPath(path, reveal, context.cwd); },
+					onDiff: toolName === "edit" ? () => {
+						const request = emitPierreDiffRequest(pi.events, {
+							baseline: "tool",
+							path: absolutePath,
+							toolCallId: context.toolCallId,
+						});
+						if (!request.handled) activeContext?.ui.notify("Pierre diff is unavailable for this edit.", "warning");
+					} : undefined,
 				});
 			},
 		};

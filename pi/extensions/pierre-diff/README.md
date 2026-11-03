@@ -2,7 +2,7 @@
 
 ## Pierre Diff
 
-Tracks exact edits and opens an agent-aware Changes workspace with Pierre-style diffs.
+Tracks cumulative session changes plus exact per-tool-call edit patches and opens an agent-aware Changes workspace with Pierre-style diffs. Main-chat and mirrored subagent `edit` headers expose an explicit `[diff]` button for that exact call alongside `[reveal]`; the path itself is inert. Pending, failed, missing, unchanged, or unavailable snapshots report a concise notification.
 
 ![Pierre Diff TUI showing a stacked Git diff for README.md](./assets/screenshot.png)
 

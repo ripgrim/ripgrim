@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { basename, isAbsolute, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
-export type DiffBaseline = "agent" | "git";
+export type DiffBaseline = "agent" | "git" | "tool";
 export type DiffLineKind = "context" | "add" | "delete" | "hunk" | "meta";
 
 export interface ParsedDiffLine {

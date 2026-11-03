@@ -29,6 +29,18 @@ import {
 	readTextFile,
 } from "../../../runtime/src/pierre-diff-core.ts";
 import { createJsonlTailState, readJsonlTail } from "../../../runtime/src/incremental-jsonl.ts";
+import {
+	PIERRE_DIFF_REQUEST_EVENT,
+	type PierreDiffRequest,
+	type ToolDiffSource,
+} from "../../../runtime/src/pierre-diff-request.ts";
+import {
+	createToolDiffSnapshotStore,
+	finishToolDiffSnapshot,
+	lookupToolDiffSnapshot,
+	startToolDiffSnapshot,
+	toolResultPatch,
+} from "../../../runtime/src/tool-diff-snapshots.ts";
 
 interface ChangeEntry {
 	actorKey: string;
@@ -47,7 +59,9 @@ interface ChangeGroup { key: string; label: string; items: ChangeItem[] }
 const MAIN_ACTOR = "main";
 const groups = new Map<string, Map<string, ChangeEntry>>();
 const pendingMain = new Map<string, string>();
+const toolSnapshots = createToolDiffSnapshotStore();
 let activeCwd = process.cwd();
+let activeContext: ExtensionContext | undefined;
 let journalPath: string | undefined;
 let journalTail = createJsonlTailState();
 let journalTimer: ReturnType<typeof setInterval> | undefined;
@@ -445,6 +459,22 @@ function ingestJournal(): boolean {
 		} else if (record.type === "after") {
 			recordAfter(actorKey, absolutePath, typeof record.after === "string" ? record.after : null, Number(record.ts) || Date.now());
 			changed = true;
+		} else if (record.type === "tool_snapshot" && typeof record.toolCallId === "string") {
+			startToolDiffSnapshot(toolSnapshots, {
+				toolCallId: record.toolCallId,
+				scope: runId,
+				path: absolutePath,
+				before: typeof record.before === "string" ? record.before : null,
+			});
+		} else if (record.type === "tool_after" && typeof record.toolCallId === "string") {
+			finishToolDiffSnapshot(toolSnapshots, {
+				toolCallId: record.toolCallId,
+				scope: runId,
+				after: typeof record.after === "string" ? record.after : null,
+				patch: typeof record.patch === "string" ? record.patch : undefined,
+				failed: record.failed === true,
+				unavailable: record.unavailable === true,
+			});
 		}
 	}
 	return changed;
@@ -475,7 +505,7 @@ function gitFiles(cwd: string): string[] {
 	return gitChangedPaths(cwd).map((entry) => entry.path);
 }
 function trackedPaths(): string[] { return uniqueSessionFiles().map((file) => file.displayPath); }
-async function choosePath(ctx: ExtensionContext, baseline: DiffBaseline, requested?: string): Promise<string | undefined> {
+async function choosePath(ctx: ExtensionContext, baseline: Exclude<DiffBaseline, "tool">, requested?: string): Promise<string | undefined> {
 	if (requested?.trim()) return requested.trim();
 	const files = baseline === "agent" ? trackedPaths() : gitFiles(ctx.cwd);
 	if (!files.length) return undefined;
@@ -484,7 +514,7 @@ async function choosePath(ctx: ExtensionContext, baseline: DiffBaseline, request
 function latestEntryForPath(absolutePath: string): ChangeEntry | undefined {
 	return [...groups.values()].flatMap((map) => [...map.values()]).filter((entry) => entry.absolutePath === absolutePath).sort((a, b) => b.updatedAt - a.updatedAt)[0];
 }
-async function showDiff(ctx: ExtensionContext, requestedPath: string | undefined, baseline: DiffBaseline): Promise<{ ok: boolean; message: string }> {
+async function showDiff(ctx: ExtensionContext, requestedPath: string | undefined, baseline: Exclude<DiffBaseline, "tool">): Promise<{ ok: boolean; message: string }> {
 	ingestJournal();
 	if (ctx.mode !== "tui") return { ok: false, message: "Pierre diff requires interactive TUI mode." };
 	const selected = await choosePath(ctx, baseline, requestedPath);
@@ -502,6 +532,62 @@ async function showDiff(ctx: ExtensionContext, requestedPath: string | undefined
 	await ctx.ui.custom<void>((tui, theme, _keys, done) => new PierreDiffView(tui, theme, done, displayPath, baseline, parsed), { overlay: true, overlayOptions: { anchor: "center", width: "92%", maxHeight: "94%" } });
 	return { ok: true, message: `Displayed ${baseline} diff for ${displayPath}: +${parsed.additions} −${parsed.deletions}.` };
 }
+async function showToolDiff(ctx: ExtensionContext, source: ToolDiffSource): Promise<void> {
+	ingestJournal();
+	if (ctx.mode !== "tui") {
+		ctx.ui.notify("Pierre diff requires interactive TUI mode.", "warning");
+		return;
+	}
+	let before: string | null | undefined;
+	let after: string | null | undefined;
+	let patch: string | undefined;
+	let path = source.path;
+	if (Object.hasOwn(source, "patch")) {
+		patch = source.patch ?? "";
+		if (!patch.trim()) {
+			ctx.ui.notify(`Edit made no changes to ${relative(ctx.cwd, path) || path}.`, "info");
+			return;
+		}
+	} else if (Object.hasOwn(source, "before") && Object.hasOwn(source, "after")) {
+		before = source.before ?? null;
+		after = source.after ?? null;
+		if (before === after) {
+			ctx.ui.notify(`Edit made no changes to ${relative(ctx.cwd, path) || path}.`, "info");
+			return;
+		}
+	} else {
+		const lookup = lookupToolDiffSnapshot(toolSnapshots, source.toolCallId, source.scope);
+		if (lookup.status === "missing") {
+			ctx.ui.notify(`No edit snapshot is available for ${relative(ctx.cwd, path) || path}.`, "warning");
+			return;
+		}
+		path = lookup.snapshot.path;
+		const displayPath = relative(ctx.cwd, path) || path;
+		if (lookup.status === "pending") {
+			ctx.ui.notify(`Edit for ${displayPath} is still running.`, "info");
+			return;
+		}
+		if (lookup.status === "failed") {
+			ctx.ui.notify(`Edit for ${displayPath} failed; no diff is available.`, "warning");
+			return;
+		}
+		if (lookup.status === "unavailable") {
+			ctx.ui.notify(`Exact edit snapshot is unavailable for ${displayPath}.`, "warning");
+			return;
+		}
+		if (lookup.status === "unchanged") {
+			ctx.ui.notify(`Edit made no changes to ${displayPath}.`, "info");
+			return;
+		}
+		patch = lookup.snapshot.patch;
+		before = lookup.snapshot.before;
+		after = lookup.snapshot.after;
+	}
+	const displayPath = relative(ctx.cwd, path) || path;
+	const parsed = parseUnifiedDiff(patch ?? agentPatch(displayPath, before ?? null, after ?? null));
+	await ctx.ui.custom<void>((tui, theme, _keys, done) => new PierreDiffView(tui, theme, done, displayPath, "tool", parsed), { overlay: true, overlayOptions: { anchor: "center", width: "92%", maxHeight: "94%" } });
+}
+
 async function openChanges(pi: ExtensionAPI, ctx: ExtensionContext): Promise<void> {
 	ingestJournal();
 	if (ctx.mode !== "tui") return;
@@ -516,10 +602,17 @@ async function openChanges(pi: ExtensionAPI, ctx: ExtensionContext): Promise<voi
 
 export default function pierreDiff(pi: ExtensionAPI): void {
 	sidebarPanel = registerSidebarPanel(pi, { id: "grim:changes", title: "CHANGES", rows: ["No agent changes"], keyValues: [{ label: "0 files", value: "0 agents", labelRole: "dim", valueRole: "dim" }, { label: "+0", value: "−0", labelRole: "success", valueRole: "error" }], role: "muted" }, { source: "grim-pierre-diff" });
+	pi.events.on(PIERRE_DIFF_REQUEST_EVENT, (value) => {
+		const request = value as PierreDiffRequest | undefined;
+		if (!request || request.version !== 1 || request.source?.baseline !== "tool" || !activeContext) return;
+		request.handled = true;
+		void showToolDiff(activeContext, request.source);
+	});
 
 	pi.on("session_start", (_event, ctx) => {
 		activeCwd = ctx.cwd;
-		groups.clear(); pendingMain.clear(); journalTail = createJsonlTailState();
+		activeContext = ctx;
+		groups.clear(); pendingMain.clear(); toolSnapshots.clear(); journalTail = createJsonlTailState();
 		changeVersion++; cachedGroupsVersion = -1; cachedFilesVersion = -1;
 		journalPath = `${tmpdir()}/pi-pierre-changes-${process.pid}-${Date.now()}.jsonl`;
 		writeFileSync(journalPath, "", { encoding: "utf8", mode: 0o600 });
@@ -536,13 +629,24 @@ export default function pierreDiff(pi: ExtensionAPI): void {
 		if (!requested) return;
 		const absolutePath = isAbsolute(requested) ? requested : resolve(ctx.cwd, requested);
 		pendingMain.set(event.toolCallId, absolutePath);
-		recordBefore({ actorKey: MAIN_ACTOR, actorLabel: "Main agent", absolutePath, displayPath: relative(ctx.cwd, absolutePath) || requested, before: readTextFile(absolutePath), startedAt: Date.now() });
+		const before = readTextFile(absolutePath);
+		startToolDiffSnapshot(toolSnapshots, { toolCallId: event.toolCallId, path: absolutePath, before });
+		recordBefore({ actorKey: MAIN_ACTOR, actorLabel: "Main agent", absolutePath, displayPath: relative(ctx.cwd, absolutePath) || requested, before, startedAt: Date.now() });
 	});
 	pi.on("tool_execution_end", (event) => {
 		const path = pendingMain.get(event.toolCallId);
 		if (!path) return;
 		pendingMain.delete(event.toolCallId);
-		if (!event.isError) recordAfter(MAIN_ACTOR, path, readTextFile(path), Date.now());
+		const after = event.isError ? undefined : readTextFile(path);
+		const patch = event.toolName === "edit" ? toolResultPatch(event.result) : undefined;
+		finishToolDiffSnapshot(toolSnapshots, {
+			toolCallId: event.toolCallId,
+			after,
+			patch,
+			failed: event.isError,
+			unavailable: !event.isError && event.toolName === "edit" && patch === undefined,
+		});
+		if (!event.isError) recordAfter(MAIN_ACTOR, path, after ?? null, Date.now());
 		updateSidebar(true);
 	});
 	pi.on("session_shutdown", () => {
@@ -552,6 +656,7 @@ export default function pierreDiff(pi: ExtensionAPI): void {
 		if (previousTrackerEnv === undefined) delete process.env.PI_PIERRE_TRACKER_EXTENSION; else process.env.PI_PIERRE_TRACKER_EXTENSION = previousTrackerEnv;
 		if (journalPath) { try { unlinkSync(journalPath); } catch {} }
 		journalPath = undefined;
+		activeContext = undefined;
 	});
 
 	registerCustomKeybinding(pi, { id: "changes.open", label: "Open Changes", description: "Open the Fresh-inspired session file explorer and diff workspace", defaultKey: "f9", section: "Grim extensions" });
@@ -559,7 +664,7 @@ export default function pierreDiff(pi: ExtensionAPI): void {
 	pi.registerCommand("changes", { description: "Open the Fresh-inspired session changes workspace", handler: async (_args, ctx) => openChanges(pi, ctx) });
 	pi.registerCommand("pdiff", { description: "Show a Pierre-style TUI diff for agent or Git changes", handler: async (args, ctx) => {
 		const tokens = args.trim().split(/\s+/).filter(Boolean);
-		const baseline: DiffBaseline = tokens[0] === "--git" || tokens[0] === "git" ? "git" : "agent";
+		const baseline: Exclude<DiffBaseline, "tool"> = tokens[0] === "--git" || tokens[0] === "git" ? "git" : "agent";
 		if (["--git", "git", "--agent", "agent"].includes(tokens[0] ?? "")) tokens.shift();
 		const result = await showDiff(ctx, tokens.join(" ") || undefined, baseline);
 		if (!result.ok) ctx.ui.notify(result.message, "warning");

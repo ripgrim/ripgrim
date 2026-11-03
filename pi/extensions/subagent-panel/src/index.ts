@@ -44,6 +44,9 @@ import {
 	type RevisionRenderCache,
 } from "./core.ts";
 import { createJsonlTailState, readJsonlTail, type JsonlTailState } from "../../../runtime/src/incremental-jsonl.ts";
+import { absoluteToolPath, buildOpenCommand, desktopFileUrl, detectDesktopPlatform } from "../../attachment-ux/src/core.ts";
+import { emitPierreDiffRequest, type ToolDiffSource } from "../../../runtime/src/pierre-diff-request.ts";
+import { createToolPathHeader } from "../../../runtime/src/tool-path-header.ts";
 
 const INSPECTOR_REGISTER_EVENT = "pi-subagents:inspector-register:v1";
 
@@ -242,6 +245,8 @@ export class InspectorDrawer implements Focusable {
 	private readonly allowStop: boolean;
 	private readonly targets: DrawerTarget[];
 	private readonly createChild: (target: DrawerTarget) => ChildProcessWithoutNullStreams;
+	private readonly openPath: (path: string, reveal: boolean, cwd: string) => void;
+	private readonly openToolDiff: (source: ToolDiffSource) => void;
 	private currentPosition: number;
 
 	constructor(
@@ -253,6 +258,8 @@ export class InspectorDrawer implements Focusable {
 		targets: DrawerTarget[],
 		initialPosition: number,
 		createChild: (target: DrawerTarget) => ChildProcessWithoutNullStreams,
+		openPath: (path: string, reveal: boolean, cwd: string) => void,
+		openToolDiff: (source: ToolDiffSource) => void,
 	) {
 		this.tui = tui;
 		this.theme = theme;
@@ -262,14 +269,42 @@ export class InspectorDrawer implements Focusable {
 		this.targets = targets;
 		this.currentPosition = initialPosition;
 		this.createChild = createChild;
+		this.openPath = openPath;
+		this.openToolDiff = openToolDiff;
 		this.bindChild(child);
 	}
 
-	private toolDefinition(name: string, cwd: string) {
+	private toolDefinition(name: string, target: DrawerTarget) {
+		const cwd = target.cwd;
 		switch (name) {
 			case "bash": return createBashToolDefinition(cwd);
 			case "read": return createReadToolDefinition(cwd);
-			case "edit": return createEditToolDefinition(cwd);
+			case "edit": {
+				const definition = createEditToolDefinition(cwd);
+				return {
+					...definition,
+					renderCall: (args: Record<string, unknown>, theme: Theme, context: { toolCallId: string }) => {
+						const rawPath = typeof args.path === "string" ? args.path : undefined;
+						if (!rawPath) return definition.renderCall?.(args as never, theme, context as never);
+						const absolutePath = absoluteToolPath(rawPath, cwd);
+						const platform = detectDesktopPlatform();
+						return createToolPathHeader({
+							toolName: "edit",
+							rawPath,
+							theme,
+							fileUrl: desktopFileUrl(platform, absolutePath, false),
+							revealUrl: desktopFileUrl(platform, absolutePath, true),
+							onOpen: (path, reveal) => this.openPath(path, reveal, cwd),
+							onDiff: () => this.openToolDiff({
+								baseline: "tool",
+								path: absolutePath,
+								toolCallId: context.toolCallId,
+								scope: target.runId,
+							}),
+						});
+					},
+				};
+			}
 			case "write": return createWriteToolDefinition(cwd);
 			case "grep": return createGrepToolDefinition(cwd);
 			case "find": return createFindToolDefinition(cwd);
@@ -341,7 +376,7 @@ export class InspectorDrawer implements Focusable {
 					call.id,
 					call.arguments ?? {},
 					{ showImages: false, outputPad: 0 },
-					this.toolDefinition(call.name, target.cwd),
+					this.toolDefinition(call.name, target),
 					this.tui,
 					target.cwd,
 				);
@@ -631,6 +666,25 @@ export default function inPiSubagentInspector(pi: ExtensionAPI): void {
 	let registration: InspectorRegistration | undefined;
 	let activeContext: ExtensionContext | undefined;
 
+	const openPath = async (path: string, reveal: boolean, cwd: string): Promise<void> => {
+		const ctx = activeContext;
+		if (!ctx) return;
+		const absolutePath = absoluteToolPath(path, cwd);
+		const platform = detectDesktopPlatform();
+		let desktopPath = absolutePath;
+		if (platform === "wsl") {
+			const converted = await pi.exec("wslpath", ["-w", absolutePath], { timeout: 3000 });
+			if (converted.code === 0 && converted.stdout.trim()) desktopPath = converted.stdout.trim();
+		}
+		const command = buildOpenCommand(platform, absolutePath, reveal, desktopPath);
+		const result = await pi.exec(command.command, command.args, { timeout: 5000 });
+		if (result.code !== 0) ctx.ui.notify(`Could not ${reveal ? "reveal" : "open"} ${absolutePath}.`, "error");
+	};
+	const openToolDiff = (source: ToolDiffSource): void => {
+		const request = emitPierreDiffRequest(pi.events, source);
+		if (!request.handled) activeContext?.ui.notify("Pierre diff is unavailable for this edit.", "warning");
+	};
+
 	pi.on("session_start", (_event, ctx) => {
 		activeContext = ctx.mode === "tui" ? ctx : undefined;
 		registration?.dispose();
@@ -663,6 +717,8 @@ export default function inPiSubagentInspector(pi: ExtensionAPI): void {
 							targets,
 							initialPosition,
 							createChild,
+							(path, reveal, pathCwd) => { void openPath(path, reveal, pathCwd); },
+							openToolDiff,
 						), {
 						overlay: true,
 						overlayOptions: {

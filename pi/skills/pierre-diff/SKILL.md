@@ -5,7 +5,7 @@ description: Present file changes in the interactive Pierre-style TUI diff viewe
 
 # Pierre diff
 
-Use the `show_file_diff` tool when the user asks to see one file's changes. For a session-wide review across main-agent and subagent edits, tell the user to open the F9 or `/changes` workspace.
+Use the `show_file_diff` tool when the user asks to see one file's changes. For a session-wide review across main-agent and subagent edits, tell the user to open the F9 or `/changes` workspace. The user can also click the explicit `[diff]` action beside any `edit` path in the main chat or mirrored subagent drawer to open the exact patch for that individual tool call; the path itself is inert.
 
 ## Baselines
 
