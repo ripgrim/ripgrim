@@ -1,0 +1,28 @@
+{
+  "name": "@ripgrim/pi-pierre-diff",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Agent-aware Pierre diff tracking and Changes workspace for Pi",
+  "license": "MIT",
+  "keywords": [
+    "pi-package"
+  ],
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
+  },
+  "pi": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "author": "ripgrim",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ripgrim/ripgrim.git",
+    "directory": "pi/extensions/pierre-diff"
+  }
+}

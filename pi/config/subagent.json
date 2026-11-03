@@ -1,0 +1,11 @@
+{
+  "toolActivation": "eager",
+  "pinToolDeclarations": false,
+  "inlineToolDisplay": "summary",
+  "mainWindowRenderer": {
+    "horizontalSpacing": 1
+  },
+  "fleetView": true,
+  "fleetViewPlacement": "belowEditor",
+  "asyncWidget": false
+}

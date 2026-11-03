@@ -1,0 +1,18 @@
+{
+  "name": "@ripgrim/pi-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared runtime modules for ripgrim's Pi extension packages",
+  "license": "MIT",
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "author": "ripgrim",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ripgrim/ripgrim.git",
+    "directory": "pi/runtime"
+  }
+}

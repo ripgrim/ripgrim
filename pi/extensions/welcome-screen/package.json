@@ -1,0 +1,28 @@
+{
+  "name": "@ripgrim/pi-welcome-screen",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Responsive startup card and recent-session launcher for Pi",
+  "license": "MIT",
+  "keywords": [
+    "pi-package"
+  ],
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
+  },
+  "pi": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "author": "ripgrim",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ripgrim/ripgrim.git",
+    "directory": "pi/extensions/welcome-screen"
+  }
+}

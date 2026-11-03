@@ -1,0 +1,5 @@
+{
+  "bindAddress": "127.0.0.1:17373",
+  "advertisedBaseUrl": "https://YOUR-DEVICE.YOUR-TAILNET.ts.net:17373",
+  "pushGatewayBaseUrl": "https://pi-remote-control.zerray.me"
+}

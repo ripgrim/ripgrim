@@ -1,0 +1,59 @@
+{
+  "preset": "minimal",
+  "density": "compact",
+  "nerdFont": false,
+  "shortcut": "f6",
+  "toggleShortcut": "f7",
+  "showFooter": false,
+  "showSidebarOnStartup": true,
+  "sidebarWidth": 44,
+  "showSidebarToolNames": true,
+  "completionNotifications": false,
+  "prefillEnabled": false,
+  "sidebarPanelLayout": [
+    {
+      "id": "workspace",
+      "visible": true
+    },
+    {
+      "id": "agent",
+      "visible": true
+    },
+    {
+      "id": "activity",
+      "visible": true
+    },
+    {
+      "id": "alerts",
+      "visible": true
+    },
+    {
+      "id": "context",
+      "visible": true
+    },
+    {
+      "id": "grim:changes",
+      "visible": true
+    },
+    {
+      "id": "usage",
+      "visible": true
+    },
+    {
+      "id": "subagents",
+      "visible": true
+    },
+    {
+      "id": "tools",
+      "visible": true
+    },
+    {
+      "id": "todos",
+      "visible": false
+    },
+    {
+      "id": "prefill",
+      "visible": false
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "quietStartup": true,
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-5.6-sol",
+  "defaultTools": [
+    "+codemode"
+  ],
+  "packages": [
+    "npm:opencode-pi@1.5.0",
+    "npm:@plannotator/pi-extension@0.28.47",
+    "npm:pi-powerline-footer@0.22.0",
+    {
+      "source": "npm:pi-subagents@0.84.0",
+      "extensions": []
+    },
+    "npm:pi-btw@0.8.0",
+    "npm:@narumitw/pi-inspect@0.4.1",
+    "npm:pi-context-view@0.8.2",
+    "npm:@pi-unipi/kanboard@3.0.1",
+    "npm:@juicesharp/rpiv-ask-user-question@2.15.0",
+    "npm:@narumitw/pi-usage@0.69.1",
+    "git:github.com/zerray/pi-remote-control@ad1f5ba0a563974ba4cbf897fe989154a282989b",
+    "__REPO_ROOT__/pi/extensions/attachment-ux",
+    "__REPO_ROOT__/pi/extensions/footer-context",
+    "__REPO_ROOT__/pi/extensions/image-budget",
+    "__REPO_ROOT__/pi/extensions/resource-importer",
+    "__REPO_ROOT__/pi/extensions/token-throughput",
+    "__REPO_ROOT__/pi/extensions/welcome-screen",
+    "__REPO_ROOT__/pi/extensions/keybinding-manager",
+    "__REPO_ROOT__/pi/extensions/subagent-panel",
+    "__REPO_ROOT__/pi/extensions/atelier",
+    "__REPO_ROOT__/pi/extensions/pierre-diff",
+    "__REPO_ROOT__/pi/extensions/subagents-ui",
+    "__REPO_ROOT__/pi/skills"
+  ],
+  "powerline": {
+    "preset": "minimal",
+    "welcome": false,
+    "placement": "above",
+    "separator": "pipe",
+    "padding": 1,
+    "secondaryOverflow": "drop",
+    "layout": {
+      "left": [
+        "path",
+        "git"
+      ],
+      "right": [
+        "custom:context",
+        "custom:plan",
+        "custom:usage",
+        "custom:throughput"
+      ],
+      "secondary": []
+    },
+    "path": {
+      "mode": "full"
+    },
+    "git": {
+      "showBranch": true,
+      "showStaged": false,
+      "showUnstaged": false,
+      "showUntracked": false
+    },
+    "customItems": [
+      {
+        "id": "context",
+        "statusKey": "footer-context",
+        "position": "right",
+        "selfColorize": true
+      },
+      {
+        "id": "plan",
+        "statusKey": "plannotator",
+        "position": "right",
+        "selfColorize": true
+      },
+      {
+        "id": "usage",
+        "statusKey": "usage",
+        "position": "right",
+        "prefix": "quota",
+        "color": "accent"
+      },
+      {
+        "id": "throughput",
+        "statusKey": "tok-s",
+        "position": "right",
+        "selfColorize": true
+      }
+    ]
+  }
+}

@@ -1,2 +1,16 @@
 node_modules/
 .DS_Store
+
+# Pi secrets and runtime state never belong in this repository.
+.pi/
+.unipi/
+auth.json
+sessions/
+models-store.json
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Local environment overrides.
+pi/config/settings.local.json
+pi/config/remote-control.json

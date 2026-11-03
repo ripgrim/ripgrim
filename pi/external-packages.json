@@ -1,0 +1,80 @@
+[
+  {
+    "source": "npm:opencode-pi@1.5.0",
+    "name": "OpenCode Pi",
+    "author": "pi-extensions contributors",
+    "license": "MIT",
+    "repository": "https://github.com/luongnv89/pi-extensions/tree/main/extensions/opencode-pi"
+  },
+  {
+    "source": "npm:@plannotator/pi-extension@0.28.47",
+    "name": "Plannotator Pi Extension",
+    "author": "backnotprop",
+    "license": "MIT OR Apache-2.0",
+    "repository": "https://github.com/backnotprop/plannotator"
+  },
+  {
+    "source": "npm:pi-powerline-footer@0.22.0",
+    "name": "Pi Powerline Footer",
+    "author": "Nico Bailon",
+    "license": "MIT",
+    "repository": "https://github.com/nicobailon/pi-powerline-footer"
+  },
+  {
+    "source": "npm:pi-subagents@0.84.0",
+    "name": "Pi Subagents",
+    "author": "Nico Bailon",
+    "license": "MIT",
+    "repository": "https://github.com/nicobailon/pi-subagents",
+    "note": "Installed with its extension filtered out because the local @ripgrim/pi-subagents-ui fork supplies the extension; upstream skills and prompts remain enabled."
+  },
+  {
+    "source": "npm:pi-btw@0.8.0",
+    "name": "Pi BTW",
+    "author": "Dan Bachelder",
+    "license": "MIT",
+    "repository": "https://github.com/dbachelder/pi-btw"
+  },
+  {
+    "source": "npm:@narumitw/pi-inspect@0.4.1",
+    "name": "Pi Inspect",
+    "author": "narumitw",
+    "license": "MIT",
+    "repository": "https://github.com/narumiruna/pi-extensions/tree/main/packages/pi-inspect"
+  },
+  {
+    "source": "npm:pi-context-view@0.8.2",
+    "name": "Pi Context View",
+    "author": "Dmitry Makarov",
+    "license": "MIT",
+    "repository": "https://github.com/dimk90/pi-context-view"
+  },
+  {
+    "source": "npm:@pi-unipi/kanboard@3.0.1",
+    "name": "Kanboard",
+    "author": "Neuron Mr White",
+    "license": "MIT",
+    "repository": "https://github.com/Neuron-Mr-White/unipi/tree/main/packages/kanboard"
+  },
+  {
+    "source": "npm:@juicesharp/rpiv-ask-user-question@2.15.0",
+    "name": "Ask User Question",
+    "author": "juicesharp",
+    "license": "MIT",
+    "repository": "https://github.com/juicesharp/rpiv-mono/tree/main/packages/rpiv-ask-user-question"
+  },
+  {
+    "source": "npm:@narumitw/pi-usage@0.69.1",
+    "name": "Pi Usage",
+    "author": "narumitw",
+    "license": "MIT",
+    "repository": "https://github.com/narumiruna/pi-extensions/tree/main/packages/pi-usage"
+  },
+  {
+    "source": "git:github.com/zerray/pi-remote-control@ad1f5ba0a563974ba4cbf897fe989154a282989b",
+    "name": "Pi Remote Control",
+    "author": "zerray",
+    "license": "MIT",
+    "repository": "https://github.com/zerray/pi-remote-control"
+  }
+]

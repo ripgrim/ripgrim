@@ -1,10 +1,20 @@
 {
-  "name": "ripgrim-profile-readme",
+  "name": "@ripgrim/dotfiles",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build-profile.mjs",
-    "check": "node scripts/check-profile.mjs"
+    "check": "node scripts/check-profile.mjs",
+    "pi:install": "bash pi/install.sh",
+    "pi:verify": "bash pi/verify.sh"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "ripgrim",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ripgrim/ripgrim.git"
+  }
 }

@@ -1,0 +1,138 @@
+{
+  "type": "module",
+  "name": "pi-subagents",
+  "version": "0.84.0",
+  "description": "Pi extension for single-agent delegation and scripted multi-agent workflows",
+  "author": "Nico Bailon",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicobailon/pi-subagents.git"
+  },
+  "homepage": "https://github.com/nicobailon/pi-subagents#readme",
+  "bugs": {
+    "url": "https://github.com/nicobailon/pi-subagents/issues"
+  },
+  "bin": {
+    "pi-subagents": "install.mjs"
+  },
+  "dependencies": {
+    "@js-temporal/polyfill": "0.5.1",
+    "acorn": "8.18.0",
+    "jiti": "2.7.0",
+    "undici": "8.12.3",
+    "yaml": "2.8.3"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-agent-core": "*",
+    "@earendil-works/pi-ai": ">=1.2.0",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-agent-core": {
+      "optional": true
+    },
+    "@earendil-works/pi-ai": {
+      "optional": true
+    },
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    },
+    "@earendil-works/pi-tui": {
+      "optional": true
+    },
+    "typebox": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "pi-package",
+    "pi",
+    "pi-coding-agent",
+    "extension",
+    "subagents",
+    "ai",
+    "agents",
+    "cli"
+  ],
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./bundle/index.js"
+    },
+    "./background-work": {
+      "types": "./src/api/background-work.d.ts",
+      "default": "./bundle/background-work.js"
+    },
+    "./external-job-provider": {
+      "types": "./src/api/external-job-provider.d.ts",
+      "default": "./bundle/external-job-provider.js"
+    },
+    "./external-runs": {
+      "types": "./src/api/external-runs.d.ts",
+      "default": "./bundle/external-runs.js"
+    },
+    "./agents": {
+      "types": "./src/api/agents.d.ts",
+      "default": "./bundle/agents.js"
+    },
+    "./inspectors": {
+      "types": "./src/api/inspectors.d.ts",
+      "default": "./bundle/inspectors.js"
+    },
+    "./delegation": {
+      "types": "./src/api/delegation.d.ts",
+      "default": "./bundle/delegation.js"
+    },
+    "./capability-ceiling": {
+      "types": "./src/api/capability-ceiling.d.ts",
+      "default": "./bundle/capability-ceiling.js"
+    },
+    "./workflow-resources": {
+      "types": "./src/api/workflow-resources.d.ts",
+      "default": "./bundle/workflow-resources.js"
+    },
+    "./required-child-extensions": {
+      "types": "./src/api/required-child-extensions.d.ts",
+      "default": "./bundle/required-child-extensions.js"
+    },
+    "./preflight": {
+      "types": "./src/api/preflight.d.ts",
+      "default": "./bundle/preflight.js"
+    },
+    "./control-channel": {
+      "types": "./src/api/control-channel.d.ts",
+      "default": "./bundle/control-channel.js"
+    },
+    "./intercom-bridge": {
+      "types": "./src/api/intercom-bridge.d.ts",
+      "default": "./bundle/intercom-bridge.js"
+    },
+    "./child-tool-plan": {
+      "types": "./src/api/child-tool-plan.d.ts",
+      "default": "./bundle/child-tool-plan.js"
+    },
+    "./shared-types": {
+      "types": "./src/api/shared-types.d.ts",
+      "default": "./bundle/shared-types.js"
+    },
+    "./project-panes": {
+      "types": "./src/api/project-panes.d.ts",
+      "default": "./bundle/project-panes.js"
+    }
+  },
+  "pi": {
+    "extensions": [
+      "./bundle/index.js"
+    ],
+    "skills": [
+      "./skills"
+    ],
+    "prompts": [
+      "./prompts"
+    ]
+  }
+}
