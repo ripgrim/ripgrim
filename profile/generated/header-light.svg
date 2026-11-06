@@ -12,7 +12,7 @@
     <text x="26" y="381" class="sans body t2">Designer and developer building boring software.</text>
     <text x="26" y="424" class="micro t3">Now</text><text x="86" y="424" class="code t1">building weird, useful software</text>
     <text x="26" y="452" class="micro t3">Handle</text><text x="86" y="452" class="code t1">@ripgrim</text>
-    <g><line x1="535" x2="707" y1="390.5" y2="390.5" stroke="#c9c9c2"/><line x1="707.5" x2="707.5" y1="290" y2="390" stroke="#c9c9c2"/><text x="551" y="317" class="micro t3">Repositories</text><text x="551" y="352" class="code t1" font-size="24">104</text></g>
+    <g><line x1="535" x2="707" y1="390.5" y2="390.5" stroke="#c9c9c2"/><line x1="707.5" x2="707.5" y1="290" y2="390" stroke="#c9c9c2"/><text x="551" y="317" class="micro t3">Repositories</text><text x="551" y="352" class="code t1" font-size="24">105</text></g>
     <g><line x1="707" x2="880" y1="390.5" y2="390.5" stroke="#c9c9c2"/><line x1="880.5" x2="880.5" y1="290" y2="390" stroke="none"/><text x="723" y="317" class="micro t3">Followers</text><text x="723" y="352" class="code t1" font-size="24">121</text></g>
     <g><line x1="535" x2="707" y1="490.5" y2="490.5" stroke="#c9c9c2"/><line x1="707.5" x2="707.5" y1="390" y2="490" stroke="#c9c9c2"/><text x="551" y="417" class="micro t3">Status</text><text x="551" y="452" class="code ok" font-size="24">active</text></g>
     <g><line x1="707" x2="880" y1="490.5" y2="490.5" stroke="#c9c9c2"/><line x1="880.5" x2="880.5" y1="390" y2="490" stroke="none"/><text x="723" y="417" class="micro t3">Focus</text><text x="723" y="452" class="code t1" font-size="24">tools</text></g><rect x=".5" y=".5" width="879" height="489" fill="none" stroke="#c9c9c2"/></svg>
