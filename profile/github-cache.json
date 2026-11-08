@@ -17,15 +17,15 @@
       "updated_at": "2026-11-02T21:13:14Z",
       "topics": []
     },
-    "ripgrim-com": {
-      "name": "ripgrim-com",
-      "full_name": "ripgrim/ripgrim-com",
-      "html_url": "https://github.com/ripgrim/ripgrim-com",
-      "description": null,
+    "lab": {
+      "name": "lab",
+      "full_name": "ripgrim/lab",
+      "html_url": "https://github.com/ripgrim/lab",
+      "description": "thank u justin",
       "language": "TypeScript",
-      "stargazers_count": 2,
+      "stargazers_count": 1,
       "forks_count": 0,
-      "updated_at": "2026-08-21T20:19:19Z",
+      "updated_at": "2026-11-02T15:46:00Z",
       "topics": []
     },
     "Boring-Software-Inc/v2": {
@@ -39,15 +39,15 @@
       "updated_at": "2026-11-03T05:53:25Z",
       "topics": []
     },
-    "lab": {
-      "name": "lab",
-      "full_name": "ripgrim/lab",
-      "html_url": "https://github.com/ripgrim/lab",
-      "description": "thank u justin",
+    "ripgrim-com": {
+      "name": "ripgrim-com",
+      "full_name": "ripgrim/ripgrim-com",
+      "html_url": "https://github.com/ripgrim/ripgrim-com",
+      "description": null,
       "language": "TypeScript",
-      "stargazers_count": 1,
+      "stargazers_count": 2,
       "forks_count": 0,
-      "updated_at": "2026-11-02T15:46:00Z",
+      "updated_at": "2026-08-21T20:19:19Z",
       "topics": []
     }
   }
