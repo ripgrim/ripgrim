@@ -2,8 +2,8 @@
   "user": {
     "login": "ripgrim",
     "public_repos": 106,
-    "followers": 126,
-    "following": 96
+    "followers": 127,
+    "following": 95
   },
   "repos": {
     "Boring-Software-Inc/dither-kit": {
@@ -14,7 +14,7 @@
       "language": "TypeScript",
       "stargazers_count": 124,
       "forks_count": 12,
-      "updated_at": "2026-11-10T18:48:09Z",
+      "updated_at": "2026-11-12T13:22:33Z",
       "topics": []
     },
     "Boring-Software-Inc/v2": {
